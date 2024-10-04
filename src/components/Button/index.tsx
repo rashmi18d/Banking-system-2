@@ -1,7 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTelegramPlane } from "@fortawesome/free-brands-svg-icons";
-import styles from "./Button.module.scss";
+import styles from "./button.module.scss";
 
 interface ButtonProps {
   variant: "primary" | "secondary";
