@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Accordion from "../../components/Accordion";
 import customerDetails from "../../../data/customer.json";
 import styles from "./customerDetails.module.scss";
