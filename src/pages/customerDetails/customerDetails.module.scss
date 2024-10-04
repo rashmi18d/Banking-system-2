@@ -1,0 +1,41 @@
+.customerName {
+  font-weight: bold;
+  font-size: 12px;
+  text-align: left;
+}
+
+.arrowIcon {
+  transform: rotate(0deg);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.rotate {
+  transform: rotate(180deg);
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: end;
+}
+
+.customerTable {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.customerHeader,
+.customerRow {
+  display: contents;
+}
+
+.customerHeader span {
+  font-size: 12px;
+}
+
+.customerRow span {
+  border-radius: 4px;
+  font-size: 12px;
+}

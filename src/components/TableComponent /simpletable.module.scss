@@ -1,0 +1,40 @@
+.tableContainer {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 12px;
+  border: none;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse; /* Ensures borders are merged */
+}
+
+th {
+  background-color: #f0f0f0; /* Light grey background for the header */
+  padding: 10px;
+  text-align: left;
+  font-size: 0.875rem; /* Reduced font size */
+  border-bottom: 2px solid #ddd; /* Adds a border below the header */
+  font-weight: 400;
+}
+
+td {
+  padding: 10px;
+  // border: 1px solid #ddd; /* Light grey border around table cells */
+  border-radius: 8px; /* Rounded corners for the cells */
+}
+
+tr {
+  border: 1px solid #ddd; /* Light grey border around table cells */
+
+  transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+tr:hover {
+  background-color: #f9f9f9; /* Light hover effect */
+}
+
+.sortableHeader {
+  cursor: pointer;
+}

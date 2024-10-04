@@ -1,0 +1,613 @@
+{
+  "success": true,
+  "data": {
+    "totalRecords": 9,
+    "totalPages": 2,
+    "currentPage": 1,
+    "currentPageCount": 5,
+    "data": [
+      {
+        "customerName": "Anshul trading Company",
+        "customerId": "1000",
+        "totalInvoices": "212",
+        "overDueInvoices": "212",
+        "overDueAmount": "94934079.50",
+        "outstandingAmount": "94934079.50",
+        "creditOrDebitNote": "Yes",
+        "invoices": {
+          "data": {
+            "totalPages": 1,
+            "totalRecords": 212,
+            "currentPage": 1,
+            "currentPageCount": 999999,
+            "totalAmount": "94934079.50",
+            "numberOfInvoices": 212,
+            "numberOfCustomers": 1,
+            "currency": "INR",
+            "invoices": [
+              {
+                "invoiceId": "IN1718000000492024001",
+                "invoiceNumber": "IN1718000000492024",
+                "customerName": "Anshul trading Company",
+                "invoiceDate": "",
+                "outstandingAmount": "99999999.00",
+                "dueDate": "18/04/24",
+                "status": null,
+                "lastRemainder": "25/09/24",
+                "invoiceAmount": "0.00",
+                "discount": "0.00",
+                "region": null,
+                "division": "",
+                "documentType": "DEBIT_NOTE",
+                "documentNumber": "",
+                "additionalInfo": [
+                  {
+                    "label": "Region",
+                    "value": "Tamil Nadu",
+                    "sequence": 1
+                  },
+                  {
+                    "label": "Location",
+                    "value": "",
+                    "sequence": 2
+                  }
+                ]
+              },
+              {
+                "invoiceId": "IN1718000000142017001",
+                "invoiceNumber": "IN1718000000142017",
+                "customerName": "Anshul trading Company",
+                "invoiceDate": "",
+                "outstandingAmount": "1000000.00",
+                "dueDate": "07/02/18",
+                "status": null,
+                "lastRemainder": "06/09/24",
+                "invoiceAmount": "0.00",
+                "discount": "0.00",
+                "region": null,
+                "division": "",
+                "documentType": "DEBIT_NOTE",
+                "documentNumber": "",
+                "additionalInfo": [
+                  {
+                    "label": "Region",
+                    "value": "Tamil Nadu",
+                    "sequence": 1
+                  },
+                  {
+                    "label": "Location",
+                    "value": "",
+                    "sequence": 2
+                  }
+                ]
+              },
+              {
+                "invoiceId": "IN1718000000432024001",
+                "invoiceNumber": "IN1718000000432024",
+                "customerName": "Anshul trading Company",
+                "invoiceDate": "",
+                "outstandingAmount": "350000.00",
+                "dueDate": "18/04/24",
+                "status": null,
+                "lastRemainder": "06/09/24",
+                "invoiceAmount": "0.00",
+                "discount": "0.00",
+                "region": null,
+                "division": "",
+                "documentType": "DEBIT_NOTE",
+                "documentNumber": "",
+                "additionalInfo": [
+                  {
+                    "label": "Region",
+                    "value": "Tamil Nadu",
+                    "sequence": 1
+                  },
+                  {
+                    "label": "Location",
+                    "value": "",
+                    "sequence": 2
+                  }
+                ]
+              },
+              {
+                "invoiceId": "IN1714000014322022002",
+                "invoiceNumber": "IN1714000014322022",
+                "customerName": "Anshul trading Company",
+                "invoiceDate": "",
+                "outstandingAmount": "240030.00",
+                "dueDate": "17/07/22",
+                "status": null,
+                "lastRemainder": "06/09/24",
+                "invoiceAmount": "0.00",
+                "discount": "0.00",
+                "region": null,
+                "division": "",
+                "documentType": "DEBIT_NOTE",
+                "documentNumber": "",
+                "additionalInfo": [
+                  {
+                    "label": "Region",
+                    "value": "Tamil Nadu",
+                    "sequence": 1
+                  },
+                  {
+                    "label": "Location",
+                    "value": "",
+                    "sequence": 2
+                  }
+                ]
+              },
+              {
+                "invoiceId": "IN1718000000152017001",
+                "invoiceNumber": "IN1718000000152017",
+                "customerName": "Anshul trading Company",
+                "invoiceDate": "",
+                "outstandingAmount": "100000.00",
+                "dueDate": "07/02/18",
+                "status": null,
+                "lastRemainder": "06/09/24",
+                "invoiceAmount": "0.00",
+                "discount": "0.00",
+                "region": null,
+                "division": "",
+                "documentType": "DEBIT_NOTE",
+                "documentNumber": "",
+                "additionalInfo": [
+                  {
+                    "label": "Region",
+                    "value": "Tamil Nadu",
+                    "sequence": 1
+                  },
+                  {
+                    "label": "Location",
+                    "value": "",
+                    "sequence": 2
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "customerName": "OMEGA GLASS PRIVATE LIMITED",
+        "customerId": "388",
+        "totalInvoices": "5",
+        "overDueInvoices": "5",
+        "overDueAmount": "99658.00",
+        "outstandingAmount": "99658.00",
+        "creditOrDebitNote": "No",
+        "invoices": {
+          "data": {
+            "totalPages": 1,
+            "totalRecords": 5,
+            "currentPage": 1,
+            "currentPageCount": 999999,
+            "totalAmount": "99658.00",
+            "numberOfInvoices": 5,
+            "numberOfCustomers": 1,
+            "currency": "INR",
+            "invoices": [
+              {
+                "invoiceId": "IN1714000016402024001",
+                "invoiceNumber": "IN1714000016402024",
+                "customerName": "OMEGA GLASS PRIVATE LIMITED",
+                "invoiceDate": "22/04/24",
+                "outstandingAmount": "59000.00",
+                "dueDate": "22/04/24",
+                "status": null,
+                "lastRemainder": "25/09/24",
+                "invoiceAmount": "0.00",
+                "discount": "0.00",
+                "region": null,
+                "division": "I1",
+                "documentType": "INVOICE",
+                "documentNumber": "0090037560",
+                "additionalInfo": [
+                  {
+                    "label": "Region",
+                    "value": "Karnataka",
+                    "sequence": 1
+                  },
+                  {
+                    "label": "Location",
+                    "value": "Media",
+                    "sequence": 2
+                  }
+                ]
+              },
+              {
+                "invoiceId": "IN1714000016412024001",
+                "invoiceNumber": "IN1714000016412024",
+                "customerName": "OMEGA GLASS PRIVATE LIMITED",
+                "invoiceDate": "22/04/24",
+                "outstandingAmount": "41300.00",
+                "dueDate": "22/04/24",
+                "status": null,
+                "lastRemainder": "25/09/24",
+                "invoiceAmount": "0.00",
+                "discount": "0.00",
+                "region": null,
+                "division": "I1",
+                "documentType": "INVOICE",
+                "documentNumber": "0090037561",
+                "additionalInfo": [
+                  {
+                    "label": "Region",
+                    "value": "Karnataka",
+                    "sequence": 1
+                  },
+                  {
+                    "label": "Location",
+                    "value": "Media",
+                    "sequence": 2
+                  }
+                ]
+              },
+              {
+                "invoiceId": "IN1714000008202019001",
+                "invoiceNumber": "IN1714000008202019",
+                "customerName": "OMEGA GLASS PRIVATE LIMITED",
+                "invoiceDate": "",
+                "outstandingAmount": "-10.00",
+                "dueDate": "23/07/19",
+                "status": null,
+                "lastRemainder": "25/09/24",
+                "invoiceAmount": "0.00",
+                "discount": "0.00",
+                "region": null,
+                "division": "",
+                "documentType": "CREDIT_NOTE",
+                "documentNumber": "",
+                "additionalInfo": [
+                  {
+                    "label": "Region",
+                    "value": "Karnataka",
+                    "sequence": 1
+                  },
+                  {
+                    "label": "Location",
+                    "value": "",
+                    "sequence": 2
+                  }
+                ]
+              },
+              {
+                "invoiceId": "IN1714000008212019001",
+                "invoiceNumber": "IN1714000008212019",
+                "customerName": "OMEGA GLASS PRIVATE LIMITED",
+                "invoiceDate": "",
+                "outstandingAmount": "-22.00",
+                "dueDate": "23/07/19",
+                "status": null,
+                "lastRemainder": "06/09/24",
+                "invoiceAmount": "0.00",
+                "discount": "0.00",
+                "region": null,
+                "division": "",
+                "documentType": "CREDIT_NOTE",
+                "documentNumber": "",
+                "additionalInfo": [
+                  {
+                    "label": "Region",
+                    "value": "Karnataka",
+                    "sequence": 1
+                  },
+                  {
+                    "label": "Location",
+                    "value": "",
+                    "sequence": 2
+                  }
+                ]
+              },
+              {
+                "invoiceId": "IN1714000008222019001",
+                "invoiceNumber": "IN1714000008222019",
+                "customerName": "OMEGA GLASS PRIVATE LIMITED",
+                "invoiceDate": "",
+                "outstandingAmount": "-610.00",
+                "dueDate": "23/07/19",
+                "status": null,
+                "lastRemainder": "06/09/24",
+                "invoiceAmount": "0.00",
+                "discount": "0.00",
+                "region": null,
+                "division": "",
+                "documentType": "CREDIT_NOTE",
+                "documentNumber": "",
+                "additionalInfo": [
+                  {
+                    "label": "Region",
+                    "value": "Karnataka",
+                    "sequence": 1
+                  },
+                  {
+                    "label": "Location",
+                    "value": "",
+                    "sequence": 2
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "customerName": "RAJEEV  & ENTERPRISES",
+        "customerId": "387",
+        "totalInvoices": "1",
+        "overDueInvoices": "1",
+        "overDueAmount": "50000.00",
+        "outstandingAmount": "50000.00",
+        "creditOrDebitNote": "No",
+        "invoices": {
+          "data": {
+            "totalPages": 1,
+            "totalRecords": 1,
+            "currentPage": 1,
+            "currentPageCount": 999999,
+            "totalAmount": "50000.00",
+            "numberOfInvoices": 1,
+            "numberOfCustomers": 1,
+            "currency": "INR",
+            "invoices": [
+              {
+                "invoiceId": "IN1714000016472024001",
+                "invoiceNumber": "IN1714000016472024",
+                "customerName": "RAJEEV  & ENTERPRISES",
+                "invoiceDate": "23/04/24",
+                "outstandingAmount": "50000.00",
+                "dueDate": "23/04/24",
+                "status": null,
+                "lastRemainder": "06/09/24",
+                "invoiceAmount": "0.00",
+                "discount": "0.00",
+                "region": null,
+                "division": "I1",
+                "documentType": "INVOICE",
+                "documentNumber": "0090037568",
+                "additionalInfo": [
+                  {
+                    "label": "Region",
+                    "value": "West Bengal",
+                    "sequence": 1
+                  },
+                  {
+                    "label": "Location",
+                    "value": "Media",
+                    "sequence": 2
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "customerName": "GLOWWELL SIGN",
+        "customerId": "392",
+        "totalInvoices": "1",
+        "overDueInvoices": "1",
+        "overDueAmount": "50000.00",
+        "outstandingAmount": "50000.00",
+        "creditOrDebitNote": "No",
+        "invoices": {
+          "data": {
+            "totalPages": 1,
+            "totalRecords": 1,
+            "currentPage": 1,
+            "currentPageCount": 999999,
+            "totalAmount": "50000.00",
+            "numberOfInvoices": 1,
+            "numberOfCustomers": 1,
+            "currency": "INR",
+            "invoices": [
+              {
+                "invoiceId": "IN1714000016452024001",
+                "invoiceNumber": "IN1714000016452024",
+                "customerName": "GLOWWELL SIGN",
+                "invoiceDate": "22/04/24",
+                "outstandingAmount": "50000.00",
+                "dueDate": "20/08/24",
+                "status": null,
+                "lastRemainder": "31/07/24",
+                "invoiceAmount": "0.00",
+                "discount": "0.00",
+                "region": null,
+                "division": "I2",
+                "documentType": "INVOICE",
+                "documentNumber": "0090037565",
+                "additionalInfo": [
+                  {
+                    "label": "Region",
+                    "value": "Gujarat",
+                    "sequence": 1
+                  },
+                  {
+                    "label": "Location",
+                    "value": "Telco",
+                    "sequence": 2
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "customerName": "MANOJ AUTO MOBILES",
+        "customerId": "393",
+        "totalInvoices": "1",
+        "overDueInvoices": "1",
+        "overDueAmount": "50000.00",
+        "outstandingAmount": "50000.00",
+        "creditOrDebitNote": "No",
+        "invoices": {
+          "data": {
+            "totalPages": 1,
+            "totalRecords": 1,
+            "currentPage": 1,
+            "currentPageCount": 999999,
+            "totalAmount": "50000.00",
+            "numberOfInvoices": 1,
+            "numberOfCustomers": 1,
+            "currency": "INR",
+            "invoices": [
+              {
+                "invoiceId": "IN1714000016462024001",
+                "invoiceNumber": "IN1714000016462024",
+                "customerName": "MANOJ AUTO MOBILES",
+                "invoiceDate": "22/04/24",
+                "outstandingAmount": "50000.00",
+                "dueDate": "20/08/24",
+                "status": null,
+                "lastRemainder": "29/07/24",
+                "invoiceAmount": "0.00",
+                "discount": "0.00",
+                "region": null,
+                "division": "I2",
+                "documentType": "INVOICE",
+                "documentNumber": "0090037566",
+                "additionalInfo": [
+                  {
+                    "label": "Region",
+                    "value": "Orissa",
+                    "sequence": 1
+                  },
+                  {
+                    "label": "Location",
+                    "value": "Telco",
+                    "sequence": 2
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "customerName": "Ramprasad and center",
+        "customerId": "100186",
+        "totalInvoices": "1",
+        "overDueInvoices": "1",
+        "overDueAmount": "10102.00",
+        "outstandingAmount": "10102.00",
+        "creditOrDebitNote": "No",
+        "invoices": {
+          "data": {
+            "totalPages": 1,
+            "totalRecords": 1,
+            "currentPage": 1,
+            "currentPageCount": 999999,
+            "totalAmount": "10102.00",
+            "numberOfInvoices": 1,
+            "numberOfCustomers": 1,
+            "currency": "INR",
+            "invoices": [
+              {
+                "invoiceId": "IN1714000016522024001",
+                "invoiceNumber": "IN1714000016522024",
+                "customerName": "Ramprasad and center",
+                "invoiceDate": "23/04/24",
+                "outstandingAmount": "10102.00",
+                "dueDate": "23/04/24",
+                "status": null,
+                "lastRemainder": "23/07/24",
+                "invoiceAmount": "0.00",
+                "discount": "0.00",
+                "region": null,
+                "division": "I2",
+                "documentType": "INVOICE",
+                "documentNumber": "0090037581",
+                "additionalInfo": [
+                  {
+                    "label": "Region",
+                    "value": "Telangana",
+                    "sequence": 1
+                  },
+                  {
+                    "label": "Location",
+                    "value": "Telco",
+                    "sequence": 2
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "customerName": "New Pharma company",
+        "customerId": "100196",
+        "totalInvoices": "1",
+        "overDueInvoices": "1",
+        "overDueAmount": "10000.00",
+        "outstandingAmount": "10000.00",
+        "creditOrDebitNote": "No",
+        "invoices": {
+          "data": {
+            "totalPages": 1,
+            "totalRecords": 1,
+            "currentPage": 1,
+            "currentPageCount": 999999,
+            "totalAmount": "10000.00",
+            "numberOfInvoices": 1,
+            "numberOfCustomers": 1,
+            "currency": "INR",
+            "invoices": [
+              {
+                "invoiceId": "IN1714000016512024001",
+                "invoiceNumber": "IN1714000016512024",
+                "customerName": "New Pharma company",
+                "invoiceDate": "23/04/24",
+                "outstandingAmount": "10000.00",
+                "dueDate": "23/04/24",
+                "status": null,
+                "lastRemainder": "23/07/24",
+                "invoiceAmount": "0.00",
+                "discount": "0.00",
+                "region": null,
+                "division": "I1",
+                "documentType": "INVOICE",
+                "documentNumber": "0090037579",
+                "additionalInfo": [
+                  {
+                    "label": "Region",
+                    "value": "Delhi",
+                    "sequence": 1
+                  },
+                  {
+                    "label": "Location",
+                    "value": "Media",
+                    "sequence": 2
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "customerName": "SHILPI BATH DCOS & distributor",
+        "customerId": "394",
+        "totalInvoices": "386",
+        "overDueInvoices": "386",
+        "overDueAmount": "-524672326.11",
+        "outstandingAmount": "-524672326.11",
+        "creditOrDebitNote": "Yes"
+      },
+      {
+        "customerName": "SCOPE & VINTRADE",
+        "customerId": "389",
+        "totalInvoices": "166",
+        "overDueInvoices": "166",
+        "overDueAmount": "-5695223766.00",
+        "outstandingAmount": "-5695223766.00",
+        "creditOrDebitNote": "No"
+      }
+    ],
+    "totalAmount": "-6124692252.61",
+    "numberOfInvoices": "774",
+    "numberOfCustomers": "9"
+  }
+}

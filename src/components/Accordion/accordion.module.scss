@@ -1,0 +1,87 @@
+.accordionContainer {
+  background-color: var(--grey);
+  padding: 1rem;
+  margin: 1rem;
+  position: relative;
+  cursor: pointer;
+
+  .subContainer {
+    display: grid;
+    align-items: center;
+    grid-template-columns: 0.3fr 1fr 5fr 0.5fr;
+  }
+
+  .arrowIcon {
+    transition: transform 0.3s ease;
+    margin-left: 10px;
+    color: var(--burgundy);
+    align-self: center;
+    position: absolute;
+    right: 1.5rem;
+  }
+
+  .rotate {
+    transform: rotate(180deg);
+  }
+
+  .accordionText {
+    margin-left: 10px;
+  }
+
+  .headerRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+  }
+
+  .checkboxNameContainer {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .customerName {
+    font-weight: bold;
+    font-size: 12px;
+    text-align: left;
+  }
+
+  .arrowIcon {
+    transform: rotate(0deg);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  }
+
+  .rotate {
+    transform: rotate(180deg);
+  }
+
+  .accordionContent {
+    // padding: 10px 0;
+  }
+
+  .customerTable {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    margin: 10px 0;
+  }
+
+  .customerHeader,
+  .customerRow {
+    display: contents;
+  }
+
+  .customerHeader span {
+    font-size: 12px;
+  }
+
+  .customerRow span {
+    // background-color: var(--white-smoke);
+    // padding: 5px;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+}
