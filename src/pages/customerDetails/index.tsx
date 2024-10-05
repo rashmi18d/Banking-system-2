@@ -7,6 +7,9 @@ import Modal from "../../components/Modal";
 
 const CustomerDetails = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [expandedAccordion, setExpandedAccordion] = useState<string | number>(
+    ""
+  );
 
   const headerKeys = [
     "customerId",
@@ -21,6 +24,10 @@ const CustomerDetails = () => {
     return key
       .replace(/([A-Z])/g, " $1")
       .replace(/^./, (str) => str.toUpperCase());
+  };
+
+  const handleAccordionClick = (id: string | number) => {
+    setExpandedAccordion(expandedAccordion === id ? "" : id);
   };
 
   return (
@@ -62,6 +69,10 @@ const CustomerDetails = () => {
               key={customer.customerId}
               customerDetails={customer}
               customerName={customer.customerName}
+              handleAccordionClick={() =>
+                handleAccordionClick(customer.customerId)
+              }
+              isExpanded={expandedAccordion === customer.customerId}
             >
               <div className={styles.customerName}>{customer.customerName}</div>
               <div className={styles.accordionContent}>

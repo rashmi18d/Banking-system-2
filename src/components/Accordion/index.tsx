@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./accordion.module.scss";
 import CheckboxComponent from "../CheckboxComponent";
 import SimpleTable from "../TableComponent ";
-import { useCustomerInvoiceContext } from "../../context/CustomerInvoiceContext"; // Adjust the path as needed
+import { useCustomerInvoiceContext } from "../../context/CustomerInvoiceContext";
 
 interface AccordionProps {
   hasCheckbox: boolean;
@@ -12,6 +12,8 @@ interface AccordionProps {
   customerDetails: any;
   customerName: string;
   children: React.ReactNode;
+  handleAccordionClick: (id: string | number) => void; // Accepts function from parent
+  isExpanded: boolean; // Controls whether the accordion is expanded or not
 }
 
 interface Invoice {
@@ -41,15 +43,14 @@ const Accordion: React.FC<AccordionProps> = ({
   hasCheckbox,
   id,
   children,
+  handleAccordionClick,
+  isExpanded, // Whether this accordion is expanded or not
 }) => {
-  const { toggleInvoiceId } = useCustomerInvoiceContext();
-  const [expandedAccordion, setExpandedAccordion] = useState<string | number>(
-    ""
-  );
+  const { toggleInvoiceId, removeInvoiceId } = useCustomerInvoiceContext();
   const [isChecked, setIsChecked] = useState(false);
   const [isIndeterminate, setIsIndeterminate] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
-  // Assume this is part of your component where invoices are rendered
+
   const handleCheckboxChange = (
     checked: boolean | "intermediate",
     invoices: Invoice[]
@@ -77,20 +78,13 @@ const Accordion: React.FC<AccordionProps> = ({
     }
   };
 
-  // Example of calling this function
-  // Assuming `customerInvoices` is the invoice data for the selected customer
-  // handleCheckboxChange(isChecked, customerInvoices.invoices.data.invoices);
-
-  const handleIconClick = useCallback(
-    (customerId: string | number) => {
-      setExpandedAccordion(expandedAccordion === customerId ? "" : customerId);
-    },
-    [expandedAccordion]
-  );
+  const handleIconClick = useCallback(() => {
+    handleAccordionClick(id);
+  }, [id, handleAccordionClick]);
 
   return (
     <div className={styles.accordionContainer}>
-      <div key={id} className={styles.subContainer}>
+      <div className={styles.subContainer}>
         {hasCheckbox && (
           <CheckboxComponent
             checked={isChecked}
@@ -105,14 +99,12 @@ const Accordion: React.FC<AccordionProps> = ({
         )}
         {children}
         <FontAwesomeIcon
-          onClick={() => handleIconClick(id)}
+          onClick={handleIconClick}
           icon={faAngleDown}
-          className={`${styles.arrowIcon} ${
-            expandedAccordion === id ? styles.rotate : ""
-          }`}
+          className={`${styles.arrowIcon} ${isExpanded ? styles.rotate : ""}`}
         />
       </div>
-      {expandedAccordion === id && (
+      {isExpanded && (
         <div>
           <SimpleTable
             customerDetails={customerDetails}

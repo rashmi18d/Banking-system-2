@@ -10,10 +10,27 @@ import styles from "./simpletable.module.scss";
 import { sortArray } from "../../utils/sorting";
 import { useCustomerInvoiceContext } from "../../context/CustomerInvoiceContext";
 
+interface Invoice {
+  invoiceId: string;
+  documentType: string;
+  invoiceDate: string;
+  outstandingAmount: string;
+  dueDate: string;
+  status: string | null;
+  lastReminder: string;
+}
+
+interface CustomerDetails {
+  invoices: {
+    data: {
+      invoices: Invoice[];
+    };
+  };
+}
+
 interface TableComponentProps {
-  customerDetails: any;
+  customerDetails: CustomerDetails;
   selectAll: boolean;
-  // customerName: string;
   handleIntermediateChange: (
     checked: boolean | "intermediate",
     arg2: any
@@ -42,7 +59,6 @@ const TableComponent: React.FC<TableComponentProps> = ({
   };
 
   useEffect(() => {
-    console.log("==> selectAll", selectAll);
     if (selectAll) {
       const allInvoiceIds = data.map((row: any) => row.invoiceId);
       const uniqueInvoiceIds = Array.from(
@@ -52,24 +68,20 @@ const TableComponent: React.FC<TableComponentProps> = ({
     } else {
       console.log("==> ntg");
     }
-  }, []);
+  }, [selectAll]);
 
   const invoiceCheckboxMethod = (selectedCount: any) => {
     const totalInvoices = selectedRows.length;
     // const customerInvoices = data.length;
 
     if (selectedCount > 0 && selectedCount < totalInvoices) {
-      handleIntermediateChange("intermediate", "");
+      handleIntermediateChange("intermediate", ""); // Trigger intermediate state
     } else if (selectedCount === totalInvoices) {
-      handleIntermediateChange(true, "");
+      handleIntermediateChange(true, ""); // All selected
     } else {
-      handleIntermediateChange(false, "");
+      handleIntermediateChange(false, ""); // None selected
     }
   };
-
-  useEffect(() => {
-    console.log("Updated selectedRows:", selectedRows);
-  }, [selectedRows]);
 
   const requestSort = (key: string) => {
     let direction = "ascending";
@@ -78,7 +90,6 @@ const TableComponent: React.FC<TableComponentProps> = ({
     }
     setSortConfig({ key, direction });
   };
-
   const sortedData = useMemo(
     () => sortArray(data, sortConfig.key, sortConfig.direction),
     [data, sortConfig]
