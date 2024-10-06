@@ -7,7 +7,7 @@ interface SelectedCustomerDetails {
 
 interface CustomerInvoiceContextProps {
   selectedCustomerDetails: SelectedCustomerDetails;
-  setSelectedCustomerDetails: (details: SelectedCustomerDetails) => void;
+  setSelectedCustomerDetails: (data: any) => void;
 }
 
 const CustomerInvoiceContext = createContext<

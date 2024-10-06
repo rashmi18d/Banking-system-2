@@ -4,12 +4,15 @@ import customerDetails from "../../../data/customer.json";
 import styles from "./customerDetails.module.scss";
 import Button from "../../components/Button";
 import Modal from "../../components/Modal";
+import Pagination from "../../components/Pagination";
 
 const CustomerDetails = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expandedAccordion, setExpandedAccordion] = useState<string | number>(
     ""
   );
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   const headerKeys = [
     "customerId",
@@ -28,6 +31,17 @@ const CustomerDetails = () => {
 
   const handleAccordionClick = (id: string | number) => {
     setExpandedAccordion(expandedAccordion === id ? "" : id);
+  };
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentCustomerData = customerDetails.data.data.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -56,9 +70,9 @@ const CustomerDetails = () => {
         </Button>
       </div>
 
-      {customerDetails.data.data.map((customer: any) => {
+      {currentCustomerData.map((customer: any) => {
         return (
-          <div>
+          <div key={customer.customerId}>
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
               <h2>Modal Title</h2>
               <p>This is the content of the modal.</p>
@@ -66,7 +80,6 @@ const CustomerDetails = () => {
             <Accordion
               hasCheckbox={true}
               id={customer.customerId}
-              key={customer.customerId}
               customerDetails={customer}
               customerName={customer.customerName}
               handleAccordionClick={() =>
@@ -93,6 +106,12 @@ const CustomerDetails = () => {
           </div>
         );
       })}
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={Math.ceil(customerDetails.data.data.length / itemsPerPage)}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 };
