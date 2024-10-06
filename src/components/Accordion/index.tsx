@@ -1,10 +1,11 @@
-import React, { useState, useCallback } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./accordion.module.scss";
 import CheckboxComponent from "../CheckboxComponent";
-import SimpleTable from "../TableComponent ";
+import TableComponent from "../TableComponent ";
 import { useCustomerInvoiceContext } from "../../context/CustomerInvoiceContext";
+import { InvoiceType } from "../../types/Invoice";
 
 interface AccordionProps {
   hasCheckbox: boolean;
@@ -12,30 +13,8 @@ interface AccordionProps {
   customerDetails: any;
   customerName: string;
   children: React.ReactNode;
-  handleAccordionClick: (id: string | number) => void; // Accepts function from parent
-  isExpanded: boolean; // Controls whether the accordion is expanded or not
-}
-
-interface Invoice {
-  invoiceId: string;
-  invoiceNumber: string;
-  customerName: string;
-  invoiceDate: string;
-  outstandingAmount: string;
-  dueDate: string;
-  status: string | null;
-  lastRemainder: string;
-  invoiceAmount: string;
-  discount: string;
-  region: string | null;
-  division: string;
-  documentType: string;
-  documentNumber: string;
-  additionalInfo: Array<{
-    label: string;
-    value: string;
-    sequence: number;
-  }>;
+  handleAccordionClick: (id: string | number) => void;
+  isExpanded: boolean;
 }
 
 const Accordion: React.FC<AccordionProps> = ({
@@ -44,57 +23,60 @@ const Accordion: React.FC<AccordionProps> = ({
   id,
   children,
   handleAccordionClick,
-  isExpanded, // Whether this accordion is expanded or not
+  isExpanded,
 }) => {
-  const { toggleInvoiceId, removeInvoiceId } = useCustomerInvoiceContext();
-  const [isChecked, setIsChecked] = useState(false);
-  const [isIndeterminate, setIsIndeterminate] = useState(false);
-  const [selectAll, setSelectAll] = useState(false);
-
-  const handleCheckboxChange = (
-    checked: boolean | "intermediate",
-    invoices: Invoice[]
-  ) => {
-    if (checked === "intermediate") {
-      setIsIndeterminate(true);
-      setSelectAll(false);
-    } else {
-      setSelectAll(true);
-      setIsChecked(checked);
-      setIsIndeterminate(false);
-
-      // If checked is true, add all invoice IDs from the selected customer
-      if (checked) {
-        invoices.forEach((invoice) => {
-          toggleInvoiceId(invoice.invoiceId);
-        });
-      }
-      //  {
-      //   // If unchecked, remove all invoice IDs from the selected customer
-      //   invoices.forEach((invoice) => {
-      //     removeInvoiceId(invoice.invoiceId); // This should be your existing remove function
-      //   });
-      // }
-    }
-  };
+  const { selectedCustomerDetails, setSelectedCustomerDetails } =
+    useCustomerInvoiceContext();
 
   const handleIconClick = useCallback(() => {
     handleAccordionClick(id);
   }, [id, handleAccordionClick]);
+
+  const allInvoices = customerDetails?.invoices?.data?.invoices || [];
+  const selectedInvoices = selectedCustomerDetails[id] || [];
+
+  const isSelectAll = useMemo(() => {
+    return (
+      selectedInvoices.length === allInvoices.length && allInvoices.length > 0
+    );
+  }, [selectedInvoices, allInvoices]);
+
+  const isIndeterminate = useMemo(() => {
+    return (
+      selectedInvoices.length > 0 &&
+      selectedInvoices.length < allInvoices.length
+    );
+  }, [selectedInvoices, allInvoices]);
+
+  useEffect(() => {
+    console.log("==> selectedCustomerDetails", selectedCustomerDetails);
+  }, [selectedCustomerDetails]);
+
+  const handleCheckboxChange = (checked: boolean, invoices: InvoiceType[]) => {
+    setSelectedCustomerDetails((prevDetails: any) => {
+      const updatedDetails = { ...prevDetails };
+      if (checked) {
+        updatedDetails[id] = invoices;
+      } else {
+        delete updatedDetails[id];
+      }
+      return updatedDetails;
+    });
+  };
 
   return (
     <div className={styles.accordionContainer}>
       <div className={styles.subContainer}>
         {hasCheckbox && (
           <CheckboxComponent
-            checked={isChecked}
-            onChange={(e) =>
+            checked={isSelectAll}
+            indeterminate={isIndeterminate}
+            onChange={(e) => {
               handleCheckboxChange(
                 e.target.checked,
-                customerDetails?.invoices?.data?.invoices
-              )
-            }
-            indeterminate={isIndeterminate}
+                customerDetails?.invoices?.data?.invoices || []
+              );
+            }}
           />
         )}
         {children}
@@ -104,15 +86,7 @@ const Accordion: React.FC<AccordionProps> = ({
           className={`${styles.arrowIcon} ${isExpanded ? styles.rotate : ""}`}
         />
       </div>
-      {isExpanded && (
-        <div>
-          <SimpleTable
-            customerDetails={customerDetails}
-            selectAll={selectAll}
-            handleIntermediateChange={handleCheckboxChange}
-          />
-        </div>
-      )}
+      {isExpanded && <TableComponent customerDetails={customerDetails} />}
     </div>
   );
 };
