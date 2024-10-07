@@ -4,51 +4,27 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import styles from "./invoicesModal.module.scss";
 import { useCustomerInvoiceContext } from "../../context/CustomerInvoiceContext";
 
-interface Invoice {
-  invoiceId: string;
-  invoiceNumber: string;
-  customerName: string;
-  invoiceDate: string;
-  outstandingAmount: string;
-  dueDate: string; // Due date format: DD/MM/YY
-  status: string | null;
-  lastRemainder: string;
-  invoiceAmount: string;
-  discount: string;
-  region: string | null;
-  division: string;
-  documentType: string;
-  documentNumber: string;
-  additionalInfo: { label: string; value: string; sequence: number }[];
-}
-
-interface SelectedCustomerDetails {
-  [customerId: string]: Invoice[];
-}
-
 const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   isOpen,
   onClose,
 }) => {
   const { selectedCustomerDetails } = useCustomerInvoiceContext();
 
-  // State to hold counts for overdue and remainder invoices
   const [overdueInvoicesCount, setOverdueInvoicesCount] = useState<number>(0);
   const [overdueCustomers, setOverdueCustomers] = useState<Set<string>>(
     new Set()
   );
-  const [totalOverdueAmount, setTotalOverdueAmount] = useState<number>(0); // Total overdue amount
+  const [totalOverdueAmount, setTotalOverdueAmount] = useState<number>(0);
 
   const [remainderInvoicesCount, setRemainderInvoicesCount] =
     useState<number>(0);
   const [remainderCustomers, setRemainderCustomers] = useState<Set<string>>(
     new Set()
   );
-  const [totalRemainderAmount, setTotalRemainderAmount] = useState<number>(0); // Total remainder amount
+  const [totalRemainderAmount, setTotalRemainderAmount] = useState<number>(0);
 
   const today = new Date();
 
-  // Function to determine if an invoice is overdue
   const isOverdue = (dueDate: string): boolean => {
     const [day, month, year] = dueDate.split("/").map(Number);
     const invoiceDueDate = new Date(year + 2000, month - 1, day);
@@ -64,7 +40,6 @@ const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
       const overdueCustomersSet = new Set<string>();
       const remainderCustomersSet = new Set<string>();
 
-      // Iterate through customers and their invoices
       Object.keys(selectedCustomerDetails).forEach((customerId) => {
         const customerInvoices = selectedCustomerDetails[customerId];
 
@@ -75,22 +50,20 @@ const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
           const outstandingAmount = parseFloat(invoice.outstandingAmount) || 0;
 
           if (isOverdue(invoice.dueDate)) {
-            overdueInvoices += 1; // Increment overdue invoice count
-            overdueTotal += outstandingAmount; // Add to total overdue amount
-            hasOverdue = true; // Mark customer as having overdue invoices
+            overdueInvoices += 1;
+            overdueTotal += outstandingAmount;
+            hasOverdue = true;
           } else {
-            remainderInvoices += 1; // Increment remainder (request payment) count
-            remainderTotal += outstandingAmount; // Add to total remainder amount
-            hasRemainder = true; // Mark customer as having remainder invoices
+            remainderInvoices += 1;
+            remainderTotal += outstandingAmount;
+            hasRemainder = true;
           }
         });
 
-        // Add customer ID to sets to ensure uniqueness
         if (hasOverdue) overdueCustomersSet.add(customerId);
         if (hasRemainder) remainderCustomersSet.add(customerId);
       });
 
-      // Update states for invoice counts, total amounts, and unique customers
       setOverdueInvoicesCount(overdueInvoices);
       setTotalOverdueAmount(overdueTotal);
       setOverdueCustomers(overdueCustomersSet);
@@ -112,7 +85,6 @@ const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
           <FontAwesomeIcon icon={faTimes} />
         </button>
 
-        {/* Display counts for overdue invoices, customers, and total overdue amount */}
         <div className={styles.invoicesSection}>
           <h3>Request Payment</h3>
           <p>Invoices: {overdueInvoicesCount}</p>
@@ -120,7 +92,6 @@ const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
           <p>Total Overdue Amount: ₹{totalOverdueAmount.toFixed(2)}</p>
         </div>
 
-        {/* Display counts for remainder (request payment) invoices, customers, and total remainder amount */}
         <div className={styles.invoicesSection}>
           <h3>Send Remainders</h3>
           <p>Invoices: {remainderInvoicesCount}</p>
