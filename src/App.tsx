@@ -1,6 +1,6 @@
 import "./App.css";
 import { CustomerInvoiceProvider } from "./context/CustomerInvoiceContext";
-import CustomerDetails from "./pages/customerDetails";
+import CustomerDetails from "./pages/Dashboard";
 
 function App() {
   return (

@@ -3,36 +3,36 @@
   overflow-x: auto;
   border-radius: 12px;
   border: none;
+  margin-top: 1.5rem;
 }
 
 table {
   width: 100%;
-  border-collapse: collapse; /* Ensures borders are merged */
+  border-collapse: collapse;
 }
 
 th {
-  background-color: #f0f0f0; /* Light grey background for the header */
+  background-color: #f0f0f0;
   padding: 10px;
   text-align: left;
-  font-size: 0.875rem; /* Reduced font size */
-  border-bottom: 2px solid #ddd; /* Adds a border below the header */
+  font-size: 12px;
+  border-bottom: 2px solid #ddd;
   font-weight: 400;
 }
 
 td {
   padding: 10px;
-  // border: 1px solid #ddd; /* Light grey border around table cells */
-  border-radius: 8px; /* Rounded corners for the cells */
+  border-radius: 8px;
 }
 
 tr {
-  border: 1px solid #ddd; /* Light grey border around table cells */
-
-  transition: background-color 0.3s; /* Smooth transition for hover effect */
+  border: 1px solid #ddd;
+  font-size: 12px;
+  transition: background-color 0.3s;
 }
 
 tr:hover {
-  background-color: #f9f9f9; /* Light hover effect */
+  background-color: #f9f9f9;
 }
 
 .sortableHeader {

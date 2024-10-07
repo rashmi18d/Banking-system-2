@@ -1,13 +1,13 @@
 import { useState } from "react";
 import Accordion from "../../components/Accordion";
 import customerDetails from "../../../data/customer.json";
-import styles from "./customerDetails.module.scss";
+import styles from "./dashboard.module.scss";
 import Button from "../../components/Button";
-import Modal from "../../components/Modal";
 import Pagination from "../../components/Pagination";
+import InvoicesModal from "../../components/InvoicesModal";
 
-const CustomerDetails = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const Dashboard = () => {
+  const [isInvoicesModalOpen, setIsInvoicesModalOpen] = useState(false);
   const [expandedAccordion, setExpandedAccordion] = useState<string | number>(
     ""
   );
@@ -25,8 +25,16 @@ const CustomerDetails = () => {
 
   const formatHeaderKey = (key: string) => {
     return key
+      .replace(/or/gi, " / ")
       .replace(/([A-Z])/g, " $1")
       .replace(/^./, (str) => str.toUpperCase());
+  };
+
+  const formatValue = (key: string, value: string | number) => {
+    if (key === "outstandingAmount" || key === "overDueAmount") {
+      return `₹ ${value}`;
+    }
+    return value;
   };
 
   const handleAccordionClick = (id: string | number) => {
@@ -50,7 +58,7 @@ const CustomerDetails = () => {
         <Button
           variant="secondary"
           withIcon={true}
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => setIsInvoicesModalOpen(true)}
         >
           Request Payment
         </Button>
@@ -73,10 +81,12 @@ const CustomerDetails = () => {
       {currentCustomerData.map((customer: any) => {
         return (
           <div key={customer.customerId}>
-            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-              <h2>Modal Title</h2>
-              <p>This is the content of the modal.</p>
-            </Modal>
+            {isInvoicesModalOpen && (
+              <InvoicesModal
+                isOpen={isInvoicesModalOpen}
+                onClose={() => setIsInvoicesModalOpen(false)}
+              />
+            )}
             <Accordion
               hasCheckbox={true}
               id={customer.customerId}
@@ -97,7 +107,14 @@ const CustomerDetails = () => {
                   </div>
                   <div className={styles.customerRow}>
                     {headerKeys.map((key) => (
-                      <span key={key}>{customer[key]}</span>
+                      <span
+                        key={key}
+                        className={
+                          key.includes("overDue") ? styles.overDueClass : ""
+                        }
+                      >
+                        {formatValue(key, customer[key])}
+                      </span>
                     ))}
                   </div>
                 </div>
@@ -106,7 +123,6 @@ const CustomerDetails = () => {
           </div>
         );
       })}
-
       <Pagination
         currentPage={currentPage}
         totalPages={Math.ceil(customerDetails.data.data.length / itemsPerPage)}
@@ -116,4 +132,4 @@ const CustomerDetails = () => {
   );
 };
 
-export default CustomerDetails;
+export default Dashboard;

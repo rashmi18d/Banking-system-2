@@ -34,8 +34,12 @@
 .customerHeader span {
   font-size: 12px;
 }
-
+.overDueClass {
+  color: #d62b3a;
+  font-weight: bold;
+}
 .customerRow span {
   border-radius: 4px;
   font-size: 12px;
+  font-weight: bold;
 }

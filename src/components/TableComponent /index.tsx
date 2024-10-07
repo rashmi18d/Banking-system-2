@@ -143,13 +143,13 @@ const TableComponent: React.FC<TableComponentProps> = ({ customerDetails }) => {
           {sortedData.map((row) => (
             <tr key={row.invoiceId}>
               <td>{renderCheckbox(row)}</td>
-              <td>{row.invoiceId || "N/A"}</td>
-              <td>{row.documentType || "N/A"}</td>
-              <td>{row.invoiceDate || "N/A"}</td>
-              <td>{row.outstandingAmount || "N/A"}</td>
-              <td>{row.dueDate || "N/A"}</td>
-              <td>{row.status || "Pending"}</td>
-              <td>{row.lastReminder || "N/A"}</td>
+              <td>{row.invoiceId || "--"}</td>
+              <td>{row.documentType || "--"}</td>
+              <td>{row.invoiceDate || "--"}</td>
+              <td>{row.outstandingAmount || "--"}</td>
+              <td>{row.dueDate || "--"}</td>
+              <td>{row.status || "--"}</td>
+              <td>{row.lastRemainder || "--"}</td>
             </tr>
           ))}
         </tbody>

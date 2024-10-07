@@ -1,18 +1,9 @@
 @import "../src/scss/_color.scss";
 
 #root {
-  /* max-width: 1280px; */
-  /* margin: 0 auto; */
-  padding: 2rem;
-  /* text-align: center; */
+  padding: 1.5rem 2rem;
 }
 body {
   background-color: var(--white);
   color: var(--black);
 }
-
-/* //1.selectedRow = { “customerId” : [{invoice} , {invoices}]}}
-//2.memo
-// -----. customerDetails.invoices -- selectedRows 0 , 1 , 2
-//3.childcheckboxes
-//add or remove selectedRows */
