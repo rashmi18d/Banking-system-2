@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSort,
@@ -40,6 +40,9 @@ const TableComponent: React.FC<TableComponentProps> = ({ customerDetails }) => {
     direction: "ascending",
   });
 
+  // State to force update the component
+  const [, setUpdate] = useState(0);
+
   const data: InvoiceType[] = customerDetails?.invoices?.data?.invoices || [];
 
   const requestSort = (key: keyof InvoiceType) => {
@@ -76,11 +79,18 @@ const TableComponent: React.FC<TableComponentProps> = ({ customerDetails }) => {
           );
         }
 
+        // Force update the component
+        setUpdate((prev) => prev + 1);
+
         return updatedDetails;
       });
     },
     [setSelectedCustomerDetails, customerDetails.customerId]
   );
+
+  useEffect(() => {
+    console.log("selectedCustomerDetails changed:", selectedCustomerDetails);
+  }, [selectedCustomerDetails]);
 
   const renderCheckbox = (invoice: InvoiceType) => {
     const isChecked = selectedInvoices.some(
@@ -144,9 +154,9 @@ const TableComponent: React.FC<TableComponentProps> = ({ customerDetails }) => {
             <tr key={row.invoiceId}>
               <td>{renderCheckbox(row)}</td>
               <td>{row.invoiceId || "--"}</td>
-              <td>{row.documentType || "--"}</td>
+              <td>{row.invoiceNumber || "--"}</td>
               <td>{row.invoiceDate || "--"}</td>
-              <td>{row.outstandingAmount || "--"}</td>
+              <td>₹{row.outstandingAmount || "--"}</td>
               <td>{row.dueDate || "--"}</td>
               <td>{row.status || "--"}</td>
               <td>{row.lastRemainder || "--"}</td>

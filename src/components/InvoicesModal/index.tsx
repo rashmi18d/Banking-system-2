@@ -1,102 +1,205 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import styles from "./invoicesModal.module.scss";
 import { useCustomerInvoiceContext } from "../../context/CustomerInvoiceContext";
+import Button from "../Button";
+
+const ModalTitle: React.FC<{ title: string }> = ({ title }) => (
+  <h4 className={styles.modalTitle}>{title}</h4>
+);
 
 const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   isOpen,
   onClose,
 }) => {
-  const { selectedCustomerDetails } = useCustomerInvoiceContext();
+  const {
+    overdueInvoicesCount,
+    remainderInvoicesCount,
+    overdueCustomers,
+    remainderCustomers,
+    overdueTotalAmount,
+    remainderTotalAmount,
+    selectedCustomerDetails,
+  } = useCustomerInvoiceContext();
 
-  const [overdueInvoicesCount, setOverdueInvoicesCount] = useState<number>(0);
-  const [overdueCustomers, setOverdueCustomers] = useState<Set<string>>(
-    new Set()
-  );
-  const [totalOverdueAmount, setTotalOverdueAmount] = useState<number>(0);
+  const [activeTab, setActiveTab] = useState("");
+  const getCustomerGreeting = () => {
+    const customers =
+      activeTab === "requestPayment" ? overdueCustomers : remainderCustomers;
 
-  const [remainderInvoicesCount, setRemainderInvoicesCount] =
-    useState<number>(0);
-  const [remainderCustomers, setRemainderCustomers] = useState<Set<string>>(
-    new Set()
-  );
-  const [totalRemainderAmount, setTotalRemainderAmount] = useState<number>(0);
-
-  const today = new Date();
-
-  const isOverdue = (dueDate: string): boolean => {
-    const [day, month, year] = dueDate.split("/").map(Number);
-    const invoiceDueDate = new Date(year + 2000, month - 1, day);
-    return invoiceDueDate < today;
+    if (customers.size === 1) {
+      const customerArray = Array.from(customers);
+      const firstCustomerId = customerArray[0];
+      const customerName =
+        selectedCustomerDetails[firstCustomerId]?.[0]?.customerName ||
+        "Customer";
+      return `Hi ${customerName},`;
+    } else if (customers.size > 1) {
+      return "Hi Customers,";
+    }
   };
 
   useEffect(() => {
-    if (isOpen && selectedCustomerDetails) {
-      let overdueInvoices = 0;
-      let remainderInvoices = 0;
-      let overdueTotal = 0;
-      let remainderTotal = 0;
-      const overdueCustomersSet = new Set<string>();
-      const remainderCustomersSet = new Set<string>();
-
-      Object.keys(selectedCustomerDetails).forEach((customerId) => {
-        const customerInvoices = selectedCustomerDetails[customerId];
-
-        let hasOverdue = false;
-        let hasRemainder = false;
-
-        customerInvoices.forEach((invoice) => {
-          const outstandingAmount = parseFloat(invoice.outstandingAmount) || 0;
-
-          if (isOverdue(invoice.dueDate)) {
-            overdueInvoices += 1;
-            overdueTotal += outstandingAmount;
-            hasOverdue = true;
-          } else {
-            remainderInvoices += 1;
-            remainderTotal += outstandingAmount;
-            hasRemainder = true;
-          }
-        });
-
-        if (hasOverdue) overdueCustomersSet.add(customerId);
-        if (hasRemainder) remainderCustomersSet.add(customerId);
-      });
-
-      setOverdueInvoicesCount(overdueInvoices);
-      setTotalOverdueAmount(overdueTotal);
-      setOverdueCustomers(overdueCustomersSet);
-
-      setRemainderInvoicesCount(remainderInvoices);
-      setTotalRemainderAmount(remainderTotal);
-      setRemainderCustomers(remainderCustomersSet);
+    if (overdueInvoicesCount > 0) {
+      setActiveTab("requestPayment");
+    } else if (remainderInvoicesCount > 0) {
+      setActiveTab("sendRemainder");
     }
-  }, [isOpen, selectedCustomerDetails]);
+  }, [overdueInvoicesCount, remainderInvoicesCount, isOpen]);
+
+  const getTotalAmount = () => {
+    if (activeTab === "requestPayment") {
+      return `₹${overdueTotalAmount.toFixed(2)}`;
+    } else if (activeTab === "sendRemainder") {
+      return `₹${remainderTotalAmount.toFixed(2)}`;
+    }
+    return "₹0.00";
+  };
+
+  const getButtonLabel = () => {
+    if (activeTab === "requestPayment") {
+      return "Request Payment via Email";
+    } else if (activeTab === "sendRemainder") {
+      return "Send Reminder via Email";
+    }
+    return "";
+  };
 
   if (!isOpen) {
     return null;
   }
 
+  const title =
+    activeTab === "requestPayment"
+      ? "Request Payment"
+      : activeTab === "sendRemainder"
+      ? "Send Remainder"
+      : "";
+
+  const isDataAvailable =
+    overdueInvoicesCount > 0 || remainderInvoicesCount > 0;
+
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
-        <button className={styles.closeButton} onClick={onClose}>
-          <FontAwesomeIcon icon={faTimes} />
-        </button>
-
-        <div className={styles.invoicesSection}>
-          <h3>Request Payment</h3>
-          <p>Invoices: {overdueInvoicesCount}</p>
-          <p>Customers: {overdueCustomers.size}</p>
-          <p>Total Overdue Amount: ₹{totalOverdueAmount.toFixed(2)}</p>
+        <div className={styles.modalHeader}>
+          {overdueInvoicesCount <= 0 && remainderInvoicesCount <= 0 && (
+            <ModalTitle title="No Invoices Available" />
+          )}
+          {overdueInvoicesCount === 0 || remainderInvoicesCount === 0 ? (
+            <ModalTitle title={title} />
+          ) : null}
+          <button className={styles.closeButton} onClick={onClose}>
+            <FontAwesomeIcon icon={faTimes} />
+          </button>
         </div>
 
-        <div className={styles.invoicesSection}>
-          <h3>Send Remainders</h3>
-          <p>Invoices: {remainderInvoicesCount}</p>
-          <p>Customers: {remainderCustomers.size}</p>
-          <p>Total Due Amount: ₹{totalRemainderAmount.toFixed(2)}</p>
+        {isDataAvailable ? (
+          <>
+            {/* Show tabs only if both counts are greater than zero */}
+            {overdueInvoicesCount > 0 && remainderInvoicesCount > 0 && (
+              <div className={styles.tabContainer}>
+                <button
+                  className={`${styles.tabButton} ${
+                    activeTab === "requestPayment" ? styles.activeTab : ""
+                  }`}
+                  onClick={() => setActiveTab("requestPayment")}
+                >
+                  Request Payment
+                </button>
+                <button
+                  className={`${styles.tabButton} ${
+                    activeTab === "sendRemainder" ? styles.activeTab : ""
+                  }`}
+                  onClick={() => setActiveTab("sendRemainder")}
+                >
+                  Send Reminder
+                </button>
+              </div>
+            )}
+
+            {/* Request Payment tab */}
+            {activeTab === "requestPayment" && overdueInvoicesCount > 0 && (
+              <div className={styles.invoicesSection}>
+                <p className={styles.invoiceHeader}>
+                  #INVOICES
+                  <div className={styles.invoiceValue}>
+                    {overdueInvoicesCount}
+                  </div>{" "}
+                </p>
+                <p className={styles.invoiceHeader}>
+                  TOTAL CUSTOMERS
+                  <div className={styles.invoiceValue}>
+                    {" "}
+                    {overdueCustomers.size}
+                  </div>
+                </p>
+                <p className={styles.invoiceHeader}>
+                  TOTAL OVERDUE AMOUNT
+                  <div className={styles.invoiceValue}>
+                    {" "}
+                    ₹{overdueTotalAmount.toFixed(2)}
+                  </div>{" "}
+                </p>
+              </div>
+            )}
+
+            {/* Send Reminder tab */}
+            {activeTab === "sendRemainder" && remainderInvoicesCount > 0 && (
+              <div className={styles.invoicesSection}>
+                <p className={styles.invoiceHeader}>
+                  #INVOICES
+                  <div className={styles.invoiceValue}>
+                    {" "}
+                    {remainderInvoicesCount}
+                  </div>
+                </p>
+                <p className={styles.invoiceHeader}>
+                  TOTAL CUSTOMERS
+                  <div className={styles.invoiceValue}>
+                    {remainderCustomers.size}
+                  </div>
+                </p>
+                <p className={styles.invoiceHeader}>
+                  TOTAL DUE AMOUNT
+                  <div className={styles.invoiceValue}>
+                    {" "}
+                    ₹{remainderTotalAmount.toFixed(2)}
+                  </div>
+                </p>
+              </div>
+            )}
+          </>
+        ) : (
+          <p>Loading data...</p>
+        )}
+        <div className={styles.infoBackground}>
+          <div className={styles.messageTitle}>Message</div>
+          <div className={styles.messageContainer}>
+            <div className={styles.customerName}>{getCustomerGreeting()} </div>
+            <div className={styles.emailDescription}>
+              Your payment amounting to {getTotalAmount()} is overdue. Please
+              complete the payment to stop incurring charges.
+            </div>
+            <div className={styles.emailInfo}>
+              <div>Regards, </div>
+              <div>Sanjay Kumar</div>
+              <div>Senior AR Manager, ABC Company</div>
+              <div>+919465863456</div>
+            </div>
+          </div>
+          <div className={styles.buttonContainer}>
+            <Button
+              variant="primary"
+              onClick={() => {
+                onClose();
+              }}
+              size="large"
+            >
+              {getButtonLabel()}
+            </Button>
+          </div>
         </div>
       </div>
     </div>

@@ -1,9 +1,25 @@
+.dashboardPage {
+  position: relative;
+}
 .customerName {
   font-weight: bold;
   font-size: 12px;
   text-align: left;
 }
 
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.customerInfo {
+  text-align: right;
+  margin: 10px 0;
+  color: #333;
+  font-size: 12px;
+}
 .arrowIcon {
   transform: rotate(0deg);
   transition: transform 0.3s ease;
@@ -40,6 +56,12 @@
 }
 .customerRow span {
   border-radius: 4px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
+}
+
+.dataContainer {
+  position: absolute;
+  height: 80vh;
+  overflow-y: auto;
 }

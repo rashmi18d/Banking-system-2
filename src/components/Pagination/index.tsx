@@ -1,4 +1,9 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
 import styles from "./pagination.module.scss";
 
 interface PaginationProps {
@@ -27,23 +32,36 @@ const Pagination: React.FC<PaginationProps> = ({
   return (
     <div className={styles.paginationContainer}>
       <button
-        className={styles.pageButton}
+        className={`${styles.arrowButton} ${
+          currentPage > 1 ? styles.burgundy : ""
+        }`}
         onClick={handlePrevClick}
         disabled={currentPage === 1}
       >
-        &laquo; Previous
+        <FontAwesomeIcon icon={faChevronLeft} />
       </button>
 
-      <span>
-        Page {currentPage} of {totalPages}
-      </span>
+      {/* Display page numbers */}
+      {Array.from({ length: totalPages }, (_, index) => (
+        <button
+          key={index + 1}
+          className={`${styles.pageNumber} ${
+            currentPage === index + 1 ? styles.activePage : ""
+          }`}
+          onClick={() => onPageChange(index + 1)}
+        >
+          {index + 1}
+        </button>
+      ))}
 
       <button
-        className={styles.pageButton}
+        className={`${styles.arrowButton} ${
+          currentPage < totalPages ? styles.burgundy : ""
+        }`}
         onClick={handleNextClick}
         disabled={currentPage === totalPages}
       >
-        Next &raquo;
+        <FontAwesomeIcon icon={faChevronRight} />
       </button>
     </div>
   );

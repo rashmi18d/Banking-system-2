@@ -53,12 +53,12 @@ const Button: React.FC<ButtonProps> = ({
       onClick={onClick}
       disabled={disabled}
     >
-      {withIcon && variant === "primary" && (
+      {/* {withIcon && variant === "primary" && (
         <FontAwesomeIcon
           icon={faTelegramPlane}
           style={{ color: "red", marginRight: "8px" }}
         />
-      )}
+      )} */}
       {children}
     </button>
   );
