@@ -30,6 +30,8 @@ const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   } = useCustomerInvoiceContext();
 
   const [activeTab, setActiveTab] = useState<Tab | "">("");
+  const [requestPaymentClicked, setRequestPaymentClicked] = useState(false);
+  const [sendReminderClicked, setSendReminderClicked] = useState(false);
 
   const getCustomerGreeting = () => {
     const customers =
@@ -75,54 +77,76 @@ const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   const handleButtonClick = () => {
     const today = new Date();
 
-    // Helper to check if the invoice is overdue
     const isOverdue = (dueDate: string): boolean => {
       const [day, month, year] = dueDate
         .split("/")
         .map((value) => parseInt(value, 10));
-
-      // Construct the date correctly as YYYY-MM-DD for Date object
       const invoiceDate = new Date(parseInt(`20${year}`, 10), month - 1, day);
-
-      // Compare the invoiceDate to the current date (today)
-      return invoiceDate < new Date(); // true if invoiceDate is in the past (overdue)
+      return invoiceDate < today;
     };
 
     const updatedCustomerDetails = { ...selectedCustomerDetails };
 
-    // Iterate over customers and update invoices based on the active tab
+    const selectedInvoicesArray: Array<{
+      customerId: string;
+      invoices: any[];
+    }> = [];
+
     Object.keys(updatedCustomerDetails).forEach((customerId) => {
       const customerInvoices = updatedCustomerDetails[customerId];
 
       if (customerInvoices) {
-        // Update the lastRemainder date for all invoices in the current tab
-        updatedCustomerDetails[customerId] = customerInvoices.map(
-          (invoice: any) => ({
-            ...invoice,
-            lastRemainder: today.toLocaleDateString("en-GB"), // Format as DD/MM/YY
-          })
-        );
+        let filteredInvoices: any[] = [];
 
-        // Remove invoices based on the active tab:
         if (activeTab === Tab.RequestPayment) {
-          // Remove overdue invoices (dueDate < today)
-          updatedCustomerDetails[customerId] = customerInvoices.filter(
-            (invoice: any) => !isOverdue(invoice.dueDate) // Keep non-overdue
+          filteredInvoices = customerInvoices.filter((invoice: any) =>
+            isOverdue(invoice.dueDate)
           );
+          setRequestPaymentClicked(true);
         } else if (activeTab === Tab.SendRemainder) {
-          // Remove due invoices (dueDate >= today)
-          updatedCustomerDetails[customerId] = customerInvoices.filter(
-            (invoice: any) => isOverdue(invoice.dueDate) // Keep only overdue
+          filteredInvoices = customerInvoices.filter(
+            (invoice: any) => !isOverdue(invoice.dueDate)
           );
+          setSendReminderClicked(true);
         }
-        if (updatedCustomerDetails[customerId].length === 0) {
-          delete updatedCustomerDetails[customerId];
-          onClose();
+
+        if (filteredInvoices.length > 0) {
+          selectedInvoicesArray.push({
+            customerId,
+            invoices: filteredInvoices,
+          });
+
+          updatedCustomerDetails[customerId] = customerInvoices.map(
+            (invoice: any) => ({
+              ...invoice,
+              lastRemainder: today.toLocaleDateString("en-GB"),
+            })
+          );
+
+          if (activeTab === Tab.RequestPayment) {
+            updatedCustomerDetails[customerId] = customerInvoices.filter(
+              (invoice: any) => !isOverdue(invoice.dueDate)
+            );
+          } else if (activeTab === Tab.SendRemainder) {
+            updatedCustomerDetails[customerId] = customerInvoices.filter(
+              (invoice: any) => isOverdue(invoice.dueDate)
+            );
+          }
+
+          if (updatedCustomerDetails[customerId].length === 0) {
+            delete updatedCustomerDetails[customerId];
+          }
         }
       }
     });
 
+    console.log("Selected Invoices Array:", selectedInvoicesArray);
+
     setSelectedCustomerDetails(updatedCustomerDetails);
+
+    if (requestPaymentClicked || sendReminderClicked) {
+      onClose();
+    }
   };
 
   const title =
