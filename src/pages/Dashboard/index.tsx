@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Accordion from "../../components/Accordion";
 import customerDetails from "../../../data/customer.json";
 import styles from "./dashboard.module.scss";
@@ -6,14 +6,42 @@ import Button from "../../components/Button";
 import Pagination from "../../components/Pagination";
 import InvoicesModal from "../../components/InvoicesModal";
 import { useCustomerInvoiceContext } from "../../context/CustomerInvoiceContext";
+import CheckboxComponent from "../../components/CheckboxComponent";
 
 const Dashboard = () => {
   const [isInvoicesModalOpen, setIsInvoicesModalOpen] = useState(false);
   const [expandedAccordion, setExpandedAccordion] = useState<string | number>(
     ""
   );
+
   const [currentPage, setCurrentPage] = useState(1);
+  const [allCustomers, setAllCustomers] = useState<any[]>([]);
+
+  const [isAllChecked, setIsAllChecked] = useState(false);
+  const [indeterminate, setIndeterminate] = useState(false);
+
   const itemsPerPage = 5;
+  const {
+    selectedCustomerDetails,
+    setSelectedCustomerDetails,
+    overdueInvoicesCount,
+    remainderInvoicesCount,
+  } = useCustomerInvoiceContext();
+
+  useEffect(() => {
+    setAllCustomers(customerDetails.data.data);
+  }, []);
+
+  useEffect(() => {
+    const selectedCount = Object.keys(selectedCustomerDetails).length;
+    setIsAllChecked(selectedCount === allCustomers.length);
+    setIndeterminate(selectedCount > 0 && selectedCount < allCustomers.length);
+  }, [
+    selectedCustomerDetails,
+    allCustomers,
+    overdueInvoicesCount,
+    remainderInvoicesCount,
+  ]);
 
   const headerKeys = [
     "customerId",
@@ -44,22 +72,16 @@ const Dashboard = () => {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentCustomerData = customerDetails.data.data.slice(
+  const currentCustomerData = allCustomers.slice(
     indexOfFirstItem,
     indexOfLastItem
   );
-
-  const totalPages = Math.ceil(customerDetails.data.data.length / itemsPerPage);
+  const totalPages = Math.ceil(allCustomers.length / itemsPerPage);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
 
-  // Extract overdue and due information from context
-  const { overdueInvoicesCount, remainderInvoicesCount } =
-    useCustomerInvoiceContext();
-
-  // Determine the button text based on the invoice counts
   const getButtonText = () => {
     if (overdueInvoicesCount > 0 && remainderInvoicesCount > 0) {
       return "Request Payment / Send Reminder";
@@ -68,15 +90,27 @@ const Dashboard = () => {
     } else if (remainderInvoicesCount > 0) {
       return "Send Reminder";
     }
-    // When neither overdue nor remainder invoices are selected, still show both
     return "Request Payment / Send Reminder";
+  };
+
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      const updatedSelectedInvoices = {} as { [key: string]: any[] };
+      allCustomers.forEach((customer) => {
+        updatedSelectedInvoices[customer.customerId] =
+          customer.invoices?.data?.invoices || [];
+      });
+      setSelectedCustomerDetails(updatedSelectedInvoices);
+    } else {
+      setSelectedCustomerDetails({});
+    }
   };
 
   return (
     <div className={styles.dashboardPage}>
       <div className={styles.headerContainer}>
         <div className={styles.customerInfo}>
-          {`Showing ${currentCustomerData.length} out of ${customerDetails.data.data.length} customers`}
+          {`Showing ${currentCustomerData.length} out of ${allCustomers.length} customers`}
         </div>
 
         <div className={styles.buttonContainer}>
@@ -108,6 +142,13 @@ const Dashboard = () => {
           </Button>
         </div>
       </div>
+
+      <CheckboxComponent
+        onChange={(e) => handleSelectAll(e.target.checked)}
+        checked={isAllChecked}
+        indeterminate={indeterminate}
+      />
+
       <div className={styles.dataContainer}>
         {currentCustomerData.map((customer: any) => {
           return (

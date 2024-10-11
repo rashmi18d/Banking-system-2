@@ -5,6 +5,11 @@ import styles from "./invoicesModal.module.scss";
 import { useCustomerInvoiceContext } from "../../context/CustomerInvoiceContext";
 import Button from "../Button";
 
+enum Tab {
+  RequestPayment = "requestPayment",
+  SendRemainder = "sendRemainder",
+}
+
 const ModalTitle: React.FC<{ title: string }> = ({ title }) => (
   <h4 className={styles.modalTitle}>{title}</h4>
 );
@@ -21,12 +26,14 @@ const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
     overdueTotalAmount,
     remainderTotalAmount,
     selectedCustomerDetails,
+    setSelectedCustomerDetails,
   } = useCustomerInvoiceContext();
 
-  const [activeTab, setActiveTab] = useState("");
+  const [activeTab, setActiveTab] = useState<Tab | "">("");
+
   const getCustomerGreeting = () => {
     const customers =
-      activeTab === "requestPayment" ? overdueCustomers : remainderCustomers;
+      activeTab === Tab.RequestPayment ? overdueCustomers : remainderCustomers;
 
     if (customers.size === 1) {
       const customerArray = Array.from(customers);
@@ -42,43 +49,88 @@ const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
 
   useEffect(() => {
     if (overdueInvoicesCount > 0) {
-      setActiveTab("requestPayment");
+      setActiveTab(Tab.RequestPayment);
     } else if (remainderInvoicesCount > 0) {
-      setActiveTab("sendRemainder");
+      setActiveTab(Tab.SendRemainder);
     }
   }, [overdueInvoicesCount, remainderInvoicesCount, isOpen]);
 
   const getTotalAmount = () => {
-    if (activeTab === "requestPayment") {
+    if (activeTab === Tab.RequestPayment) {
       return `₹${overdueTotalAmount.toFixed(2)}`;
-    } else if (activeTab === "sendRemainder") {
+    } else if (activeTab === Tab.SendRemainder) {
       return `₹${remainderTotalAmount.toFixed(2)}`;
     }
     return "₹0.00";
   };
 
   const getButtonLabel = () => {
-    if (activeTab === "requestPayment") {
+    if (activeTab === Tab.RequestPayment) {
       return "Request Payment via Email";
-    } else if (activeTab === "sendRemainder") {
+    } else if (activeTab === Tab.SendRemainder) {
       return "Send Reminder via Email";
     }
     return "";
   };
+  const handleButtonClick = () => {
+    const today = new Date();
 
-  if (!isOpen) {
-    return null;
-  }
+    // Helper to check if the invoice is overdue
+    const isOverdue = (dueDate: string): boolean => {
+      const [day, month, year] = dueDate
+        .split("/")
+        .map((value) => parseInt(value, 10));
+
+      // Construct the date correctly as YYYY-MM-DD for Date object
+      const invoiceDate = new Date(parseInt(`20${year}`, 10), month - 1, day);
+
+      // Compare the invoiceDate to the current date (today)
+      return invoiceDate < new Date(); // true if invoiceDate is in the past (overdue)
+    };
+
+    const updatedCustomerDetails = { ...selectedCustomerDetails };
+
+    // Iterate over customers and update invoices based on the active tab
+    Object.keys(updatedCustomerDetails).forEach((customerId) => {
+      const customerInvoices = updatedCustomerDetails[customerId];
+
+      if (customerInvoices) {
+        // Update the lastRemainder date for all invoices in the current tab
+        updatedCustomerDetails[customerId] = customerInvoices.map(
+          (invoice: any) => ({
+            ...invoice,
+            lastRemainder: today.toLocaleDateString("en-GB"), // Format as DD/MM/YY
+          })
+        );
+
+        // Remove invoices based on the active tab:
+        if (activeTab === Tab.RequestPayment) {
+          // Remove overdue invoices (dueDate < today)
+          updatedCustomerDetails[customerId] = customerInvoices.filter(
+            (invoice: any) => !isOverdue(invoice.dueDate) // Keep non-overdue
+          );
+        } else if (activeTab === Tab.SendRemainder) {
+          // Remove due invoices (dueDate >= today)
+          updatedCustomerDetails[customerId] = customerInvoices.filter(
+            (invoice: any) => isOverdue(invoice.dueDate) // Keep only overdue
+          );
+        }
+        if (updatedCustomerDetails[customerId].length === 0) {
+          delete updatedCustomerDetails[customerId];
+          onClose();
+        }
+      }
+    });
+
+    setSelectedCustomerDetails(updatedCustomerDetails);
+  };
 
   const title =
-    activeTab === "requestPayment"
+    activeTab === Tab.RequestPayment
       ? "Request Payment"
-      : activeTab === "sendRemainder"
-      ? "Send Remainder"
+      : activeTab === Tab.SendRemainder
+      ? "Send Reminder"
       : "";
-
-  const isDataAvailable =
-    overdueInvoicesCount > 0 || remainderInvoicesCount > 0;
 
   return (
     <div className={styles.modalOverlay}>
@@ -94,64 +146,59 @@ const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
             <FontAwesomeIcon icon={faTimes} />
           </button>
         </div>
+        <>
+          {overdueInvoicesCount > 0 && remainderInvoicesCount > 0 && (
+            <div className={styles.tabContainer}>
+              <button
+                className={`${styles.tabButton} ${
+                  activeTab === Tab.RequestPayment ? styles.activeTab : ""
+                }`}
+                onClick={() => setActiveTab(Tab.RequestPayment)}
+              >
+                Request Payment
+              </button>
+              <button
+                className={`${styles.tabButton} ${
+                  activeTab === Tab.SendRemainder ? styles.activeTab : ""
+                }`}
+                onClick={() => setActiveTab(Tab.SendRemainder)}
+              >
+                Send Reminder
+              </button>
+            </div>
+          )}
+        </>
 
-        {isDataAvailable ? (
-          <>
-            {/* Show tabs only if both counts are greater than zero */}
-            {overdueInvoicesCount > 0 && remainderInvoicesCount > 0 && (
-              <div className={styles.tabContainer}>
-                <button
-                  className={`${styles.tabButton} ${
-                    activeTab === "requestPayment" ? styles.activeTab : ""
-                  }`}
-                  onClick={() => setActiveTab("requestPayment")}
-                >
-                  Request Payment
-                </button>
-                <button
-                  className={`${styles.tabButton} ${
-                    activeTab === "sendRemainder" ? styles.activeTab : ""
-                  }`}
-                  onClick={() => setActiveTab("sendRemainder")}
-                >
-                  Send Reminder
-                </button>
-              </div>
-            )}
-
-            {/* Request Payment tab */}
-            {activeTab === "requestPayment" && overdueInvoicesCount > 0 && (
+        <div className={styles.infoBackground}>
+          <div className={styles.tabBody}>
+            {activeTab === Tab.RequestPayment && overdueInvoicesCount > 0 && (
               <div className={styles.invoicesSection}>
                 <p className={styles.invoiceHeader}>
                   #INVOICES
                   <div className={styles.invoiceValue}>
                     {overdueInvoicesCount}
-                  </div>{" "}
+                  </div>
                 </p>
                 <p className={styles.invoiceHeader}>
                   TOTAL CUSTOMERS
                   <div className={styles.invoiceValue}>
-                    {" "}
                     {overdueCustomers.size}
                   </div>
                 </p>
                 <p className={styles.invoiceHeader}>
                   TOTAL OVERDUE AMOUNT
                   <div className={styles.invoiceValue}>
-                    {" "}
                     ₹{overdueTotalAmount.toFixed(2)}
                   </div>{" "}
                 </p>
               </div>
             )}
 
-            {/* Send Reminder tab */}
-            {activeTab === "sendRemainder" && remainderInvoicesCount > 0 && (
+            {activeTab === Tab.SendRemainder && remainderInvoicesCount > 0 && (
               <div className={styles.invoicesSection}>
                 <p className={styles.invoiceHeader}>
                   #INVOICES
                   <div className={styles.invoiceValue}>
-                    {" "}
                     {remainderInvoicesCount}
                   </div>
                 </p>
@@ -164,17 +211,12 @@ const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
                 <p className={styles.invoiceHeader}>
                   TOTAL DUE AMOUNT
                   <div className={styles.invoiceValue}>
-                    {" "}
                     ₹{remainderTotalAmount.toFixed(2)}
                   </div>
                 </p>
               </div>
             )}
-          </>
-        ) : (
-          <p>Loading data...</p>
-        )}
-        <div className={styles.infoBackground}>
+          </div>
           <div className={styles.messageTitle}>Message</div>
           <div className={styles.messageContainer}>
             <div className={styles.customerName}>{getCustomerGreeting()} </div>
@@ -190,13 +232,7 @@ const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
             </div>
           </div>
           <div className={styles.buttonContainer}>
-            <Button
-              variant="primary"
-              onClick={() => {
-                onClose();
-              }}
-              size="large"
-            >
+            <Button variant="primary" onClick={handleButtonClick} size="large">
               {getButtonLabel()}
             </Button>
           </div>

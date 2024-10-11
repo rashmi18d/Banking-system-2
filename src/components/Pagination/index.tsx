@@ -41,7 +41,6 @@ const Pagination: React.FC<PaginationProps> = ({
         <FontAwesomeIcon icon={faChevronLeft} />
       </button>
 
-      {/* Display page numbers */}
       {Array.from({ length: totalPages }, (_, index) => (
         <button
           key={index + 1}

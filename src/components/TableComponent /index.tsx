@@ -77,6 +77,10 @@ const TableComponent: React.FC<TableComponentProps> = ({ customerDetails }) => {
           updatedDetails[customerDetails.customerId] = currentInvoices.filter(
             (inv) => inv.invoiceId !== invoice.invoiceId
           );
+
+          if (updatedDetails[customerDetails.customerId].length === 0) {
+            delete updatedDetails[customerDetails.customerId];
+          }
         }
 
         // Force update the component
@@ -87,10 +91,6 @@ const TableComponent: React.FC<TableComponentProps> = ({ customerDetails }) => {
     },
     [setSelectedCustomerDetails, customerDetails.customerId]
   );
-
-  useEffect(() => {
-    console.log("selectedCustomerDetails changed:", selectedCustomerDetails);
-  }, [selectedCustomerDetails]);
 
   const renderCheckbox = (invoice: InvoiceType) => {
     const isChecked = selectedInvoices.some(

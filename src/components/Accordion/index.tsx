@@ -48,10 +48,6 @@ const Accordion: React.FC<AccordionProps> = ({
     );
   }, [selectedInvoices, allInvoices]);
 
-  useEffect(() => {
-    console.log("==> selectedCustomerDetails", selectedCustomerDetails);
-  }, [selectedCustomerDetails]);
-
   const handleCheckboxChange = (checked: boolean, invoices: InvoiceType[]) => {
     setSelectedCustomerDetails((prevDetails: any) => {
       const updatedDetails = { ...prevDetails };

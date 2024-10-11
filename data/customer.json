@@ -594,7 +594,69 @@
         "overDueInvoices": "386",
         "overDueAmount": "-524672326.11",
         "outstandingAmount": "-524672326.11",
-        "creditOrDebitNote": "Yes"
+        "creditOrDebitNote": "Yes",
+        "invoices": {
+          "data": {
+            "invoices": [
+              {
+                "invoiceId": "IN1718000000482024001",
+                "invoiceNumber": "IN1718000000482024",
+                "customerName": "SHILPI BATH DCOS & distributor",
+                "invoiceDate": "",
+                "outstandingAmount": "99999999.00",
+                "dueDate": "17/06/24",
+                "status": null,
+                "lastRemainder": "31/07/24",
+                "invoiceAmount": "0.00",
+                "discount": "0.00",
+                "region": null,
+                "division": "",
+                "documentType": "DEBIT_NOTE",
+                "documentNumber": "",
+                "additionalInfo": [
+                  {
+                    "label": "Region",
+                    "value": "Haryana",
+                    "sequence": 1
+                  },
+                  {
+                    "label": "Location",
+                    "value": "",
+                    "sequence": 2
+                  }
+                ]
+              },
+              {
+                "invoiceId": "IN1714000009362019002",
+                "invoiceNumber": "IN1714000009362019",
+                "customerName": "SHILPI BATH DCOS & distributor",
+                "invoiceDate": "",
+                "outstandingAmount": "800200.00",
+                "dueDate": "17/01/20",
+                "status": null,
+                "lastRemainder": "31/07/24",
+                "invoiceAmount": "0.00",
+                "discount": "0.00",
+                "region": null,
+                "division": "",
+                "documentType": "DEBIT_NOTE",
+                "documentNumber": "",
+                "additionalInfo": [
+                  {
+                    "label": "Region",
+                    "value": "Haryana",
+                    "sequence": 1
+                  },
+                  {
+                    "label": "Location",
+                    "value": "",
+                    "sequence": 2
+                  }
+                ]
+              }
+            ]
+          }
+        }
       },
       {
         "customerName": "SCOPE & VINTRADE",
@@ -603,7 +665,69 @@
         "overDueInvoices": "166",
         "overDueAmount": "-5695223766.00",
         "outstandingAmount": "-5695223766.00",
-        "creditOrDebitNote": "No"
+        "creditOrDebitNote": "No",
+        "invoices": {
+          "data": {
+            "invoices": [
+              {
+                "invoiceId": "IN1714000011972021001",
+                "invoiceNumber": "IN1714000011972021",
+                "customerName": "SCOPE & VINTRADE",
+                "invoiceDate": "",
+                "outstandingAmount": "-1.00",
+                "dueDate": "12/07/21",
+                "status": null,
+                "lastRemainder": "29/07/24",
+                "invoiceAmount": "0.00",
+                "discount": "0.00",
+                "region": null,
+                "division": "",
+                "documentType": "CREDIT_NOTE",
+                "documentNumber": "",
+                "additionalInfo": [
+                  {
+                    "label": "Region",
+                    "value": "West Bengal",
+                    "sequence": 1
+                  },
+                  {
+                    "label": "Location",
+                    "value": "",
+                    "sequence": 2
+                  }
+                ]
+              },
+              {
+                "invoiceId": "IN1714000012182021001",
+                "invoiceNumber": "IN1714000012182021",
+                "customerName": "SCOPE & VINTRADE",
+                "invoiceDate": "",
+                "outstandingAmount": "-1.00",
+                "dueDate": "13/07/21",
+                "status": null,
+                "lastRemainder": null,
+                "invoiceAmount": "0.00",
+                "discount": "0.00",
+                "region": null,
+                "division": "",
+                "documentType": "CREDIT_NOTE",
+                "documentNumber": "",
+                "additionalInfo": [
+                  {
+                    "label": "Region",
+                    "value": "West Bengal",
+                    "sequence": 1
+                  },
+                  {
+                    "label": "Location",
+                    "value": "",
+                    "sequence": 2
+                  }
+                ]
+              }
+            ]
+          }
+        }
       }
     ],
     "totalAmount": "-6124692252.61",

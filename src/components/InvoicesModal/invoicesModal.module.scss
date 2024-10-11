@@ -12,7 +12,7 @@
 }
 
 .modalContent {
-  background-color: white;
+  background-color: #f6f6f6;
   padding: 20px;
   border-radius: 8px;
   position: relative;
@@ -55,8 +55,7 @@
 }
 .tabContainer {
   display: flex;
-  /* justify-content: space-between; */
-  /* margin-bottom: 20px; */
+  margin: 0 1rem;
   width: 50%;
   gap: 1rem;
 }
@@ -69,11 +68,14 @@
   cursor: pointer;
   width: 100%;
   text-align: center;
+  padding-bottom: 1rem;
 }
 
 .tabButton.activeTab {
-  // background-color: darkgray;
   color: black;
+  font-weight: bold;
+  border-bottom: 2px solid green;
+  padding-bottom: 1rem;
 }
 
 .invoicesSection {
@@ -81,7 +83,6 @@
   border-radius: 8px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  // background-color: white;
 }
 
 .messageContainer {
@@ -116,12 +117,18 @@
 
 .invoiceHeader {
   font-size: 10px;
-  // color: grey;
   font-weight: bold;
+  color: grey;
 }
 
 .invoiceValue {
   font-size: 16px;
   color: var(--black);
   font-weight: bold;
+}
+
+.infoBackground {
+  background: white;
+  padding: 1rem;
+  border-radius: 1rem;
 }
