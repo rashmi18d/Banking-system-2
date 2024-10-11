@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useEffect } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSort,
@@ -40,7 +40,6 @@ const TableComponent: React.FC<TableComponentProps> = ({ customerDetails }) => {
     direction: "ascending",
   });
 
-  // State to force update the component
   const [, setUpdate] = useState(0);
 
   const data: InvoiceType[] = customerDetails?.invoices?.data?.invoices || [];
@@ -83,7 +82,6 @@ const TableComponent: React.FC<TableComponentProps> = ({ customerDetails }) => {
           }
         }
 
-        // Force update the component
         setUpdate((prev) => prev + 1);
 
         return updatedDetails;

@@ -1,6 +1,4 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTelegramPlane } from "@fortawesome/free-brands-svg-icons";
 import styles from "./button.module.scss";
 
 interface ButtonProps {
@@ -18,7 +16,6 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   disabled = false,
   children,
-  withIcon = false,
 }) => {
   const getButtonClassNames = () => {
     let classNames = styles.button;
