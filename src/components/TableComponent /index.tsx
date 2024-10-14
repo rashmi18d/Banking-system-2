@@ -11,7 +11,7 @@ import { sortArray } from "../../utils/sorting";
 import { useCustomerInvoiceContext } from "../../context/CustomerInvoiceContext";
 import { InvoiceType } from "../../types/Invoice";
 import { InvoiceTableHeaders } from "../../constants/invoiceTable";
-import { calculateAndLogDueStatus, isOverdue } from "../../utils/invoiceUtils";
+import { calculateAndLogDueStatus } from "../../utils/invoiceUtils";
 
 interface SelectedCustomerDetails {
   [customerId: string]: InvoiceType[];
