@@ -11,6 +11,7 @@ import { sortArray } from "../../utils/sorting";
 import { useCustomerInvoiceContext } from "../../context/CustomerInvoiceContext";
 import { InvoiceType } from "../../types/Invoice";
 import { InvoiceTableHeaders } from "../../constants/invoiceTable";
+import { isOverdue } from "../../utils/invoiceUtils";
 
 interface SelectedCustomerDetails {
   [customerId: string]: InvoiceType[];
@@ -145,9 +146,18 @@ const TableComponent: React.FC<TableComponentProps> = ({ customerDetails }) => {
           {sortedData.map((row) => (
             <tr key={row.invoiceId}>
               {InvoiceTableHeaders.map((column) => {
+                if (column.key === "status") {
+                  return (
+                    <td key={column.key}>
+                      {isOverdue(row.dueDate) ? "Overdue" : "Upcoming"}
+                    </td>
+                  );
+                }
+
                 if (column.key === "checkbox") {
                   return <td key={column.key}>{renderCheckbox(row)}</td>;
                 }
+
                 return (
                   <td key={column.key}>
                     {row[column.key as keyof InvoiceType] || "--"}

@@ -5,7 +5,7 @@ import styles from "./invoicesModal.module.scss";
 import { useCustomerInvoiceContext } from "../../context/CustomerInvoiceContext";
 import Button from "../Button";
 import { generateInvoiceData } from "../../constants/invoiceModalDetails"; // Assuming you have this file
-import { getButtonLabel } from "../../utils/invoiceUtils"; // Importing the utility functions
+import { getButtonLabel, isOverdue } from "../../utils/invoiceUtils"; // Importing the utility functions
 
 enum Tab {
   RequestPayment = "requestPayment",
@@ -71,13 +71,13 @@ const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   const handleButtonClick = () => {
     const today = new Date();
 
-    const isOverdue = (dueDate: string): boolean => {
-      const [day, month, year] = dueDate
-        .split("/")
-        .map((value) => parseInt(value, 10));
-      const invoiceDate = new Date(parseInt(`20${year}`, 10), month - 1, day);
-      return invoiceDate < today;
-    };
+    // const isOverdue = (dueDate: string): boolean => {
+    //   const [day, month, year] = dueDate
+    //     .split("/")
+    //     .map((value) => parseInt(value, 10));
+    //   const invoiceDate = new Date(parseInt(`20${year}`, 10), month - 1, day);
+    //   return invoiceDate < today;
+    // };
 
     const updatedCustomerDetails = { ...selectedCustomerDetails };
 

@@ -8,3 +8,13 @@ export const getButtonLabel = (activeTab: string) => {
       return "";
   }
 };
+
+export const isOverdue = (dueDate: string): boolean => {
+  const today = new Date();
+
+  const [day, month, year] = dueDate
+    .split("/")
+    .map((value) => parseInt(value, 10));
+  const invoiceDate = new Date(parseInt(`20${year}`, 10), month - 1, day);
+  return invoiceDate < today;
+};
