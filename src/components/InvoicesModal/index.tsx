@@ -43,7 +43,6 @@ const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
     }
   }, [overdueInvoicesCount, remainderInvoicesCount, isOpen]);
 
-  // Generate the invoice data dynamically using the utility function
   const invoiceData = generateInvoiceData(
     overdueInvoicesCount,
     overdueCustomers.size,
@@ -149,15 +148,6 @@ const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
     }
     return "₹0.00";
   };
-
-  // const getButtonLabel = () => {
-  //   if (activeTab === Tab.RequestPayment) {
-  //     return "Request Payment via Email";
-  //   } else if (activeTab === Tab.SendRemainder) {
-  //     return "Send Reminder via Email";
-  //   }
-  //   return "";
-  // };
 
   return (
     <div className={styles.modalOverlay}>
