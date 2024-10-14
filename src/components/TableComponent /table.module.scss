@@ -38,3 +38,12 @@ tr:hover {
 .sortableHeader {
   cursor: pointer;
 }
+
+.statusClass {
+  // border: 1px solid var(--burgundy);
+  border-radius: 1rem;
+  margin: 4px 0;
+  padding: 12px;
+  background-color: #fcf9f9;
+  color: red;
+}

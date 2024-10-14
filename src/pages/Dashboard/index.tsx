@@ -7,7 +7,6 @@ import Pagination from "../../components/Pagination";
 import InvoicesModal from "../../components/InvoicesModal";
 import { useCustomerInvoiceContext } from "../../context/CustomerInvoiceContext";
 import CheckboxComponent from "../../components/CheckboxComponent";
-import { isOverdue } from "../../utils/invoiceUtils"; // Importing the utility functions
 
 const Dashboard = () => {
   const [isInvoicesModalOpen, setIsInvoicesModalOpen] = useState(false);

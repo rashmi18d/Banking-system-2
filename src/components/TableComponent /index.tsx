@@ -11,7 +11,7 @@ import { sortArray } from "../../utils/sorting";
 import { useCustomerInvoiceContext } from "../../context/CustomerInvoiceContext";
 import { InvoiceType } from "../../types/Invoice";
 import { InvoiceTableHeaders } from "../../constants/invoiceTable";
-import { isOverdue } from "../../utils/invoiceUtils";
+import { calculateAndLogDueStatus, isOverdue } from "../../utils/invoiceUtils";
 
 interface SelectedCustomerDetails {
   [customerId: string]: InvoiceType[];
@@ -149,7 +149,9 @@ const TableComponent: React.FC<TableComponentProps> = ({ customerDetails }) => {
                 if (column.key === "status") {
                   return (
                     <td key={column.key}>
-                      {isOverdue(row.dueDate) ? "Overdue" : "Upcoming"}
+                      <div className={styles.statusClass}>
+                        {calculateAndLogDueStatus(row?.dueDate)}
+                      </div>
                     </td>
                   );
                 }

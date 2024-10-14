@@ -4,8 +4,8 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import styles from "./invoicesModal.module.scss";
 import { useCustomerInvoiceContext } from "../../context/CustomerInvoiceContext";
 import Button from "../Button";
-import { generateInvoiceData } from "../../constants/invoiceModalDetails"; // Assuming you have this file
-import { getButtonLabel, isOverdue } from "../../utils/invoiceUtils"; // Importing the utility functions
+import { generateInvoiceData } from "../../constants/invoiceModalDetails";
+import { getButtonLabel, isOverdue } from "../../utils/invoiceUtils";
 
 enum Tab {
   RequestPayment = "requestPayment",
@@ -32,8 +32,6 @@ const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   } = useCustomerInvoiceContext();
 
   const [activeTab, setActiveTab] = useState<Tab | "">("");
-  const [requestPaymentClicked, setRequestPaymentClicked] = useState(false);
-  const [sendReminderClicked, setSendReminderClicked] = useState(false);
 
   useEffect(() => {
     if (overdueInvoicesCount > 0) {
@@ -71,14 +69,6 @@ const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   const handleButtonClick = () => {
     const today = new Date();
 
-    // const isOverdue = (dueDate: string): boolean => {
-    //   const [day, month, year] = dueDate
-    //     .split("/")
-    //     .map((value) => parseInt(value, 10));
-    //   const invoiceDate = new Date(parseInt(`20${year}`, 10), month - 1, day);
-    //   return invoiceDate < today;
-    // };
-
     const updatedCustomerDetails = { ...selectedCustomerDetails };
 
     const selectedInvoicesArray: Array<{
@@ -96,12 +86,10 @@ const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
           filteredInvoices = customerInvoices.filter((invoice: any) =>
             isOverdue(invoice.dueDate)
           );
-          setRequestPaymentClicked(true);
         } else if (activeTab === Tab.SendRemainder) {
           filteredInvoices = customerInvoices.filter(
             (invoice: any) => !isOverdue(invoice.dueDate)
           );
-          setSendReminderClicked(true);
         }
 
         if (filteredInvoices.length > 0) {
