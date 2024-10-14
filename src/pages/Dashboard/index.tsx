@@ -16,6 +16,9 @@ const Dashboard = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [allCustomers, setAllCustomers] = useState<any[]>([]);
+  const [buttonText, setButtonText] = useState(
+    "Request Payment / Send Reminder"
+  );
 
   const [isAllChecked, setIsAllChecked] = useState(false);
   const [indeterminate, setIndeterminate] = useState(false);
@@ -36,6 +39,7 @@ const Dashboard = () => {
     const selectedCount = Object.keys(selectedCustomerDetails).length;
     setIsAllChecked(selectedCount === allCustomers.length);
     setIndeterminate(selectedCount > 0 && selectedCount < allCustomers.length);
+    updateButtonText();
   }, [
     selectedCustomerDetails,
     allCustomers,
@@ -82,15 +86,17 @@ const Dashboard = () => {
     setCurrentPage(page);
   };
 
-  const getButtonText = () => {
+  const updateButtonText = () => {
+    console.log("==>overdueInvoicesCount ", overdueInvoicesCount);
     if (overdueInvoicesCount > 0 && remainderInvoicesCount > 0) {
-      return "Request Payment / Send Reminder";
+      setButtonText("Request Payment / Send Reminder");
     } else if (overdueInvoicesCount > 0) {
-      return "Request Payment";
+      setButtonText("Request Payment");
     } else if (remainderInvoicesCount > 0) {
-      return "Send Reminder";
+      setButtonText("Send Reminder");
+    } else {
+      setButtonText("Request Payment / Send Reminder");
     }
-    return "Request Payment / Send Reminder";
   };
 
   const handleSelectAll = (checked: boolean) => {
@@ -122,7 +128,7 @@ const Dashboard = () => {
               overdueInvoicesCount === 0 && remainderInvoicesCount === 0
             }
           >
-            {getButtonText()}
+            {buttonText}
           </Button>
           <Button
             variant="secondary"

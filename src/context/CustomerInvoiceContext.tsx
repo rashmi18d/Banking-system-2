@@ -88,9 +88,7 @@ export const CustomerInvoiceProvider: React.FC<{
   };
 
   useEffect(() => {
-    if (Object.keys(selectedCustomerDetails).length > 0) {
-      processCustomerDetails();
-    }
+    processCustomerDetails();
   }, [selectedCustomerDetails]);
 
   return (
