@@ -4,6 +4,8 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import styles from "./invoicesModal.module.scss";
 import { useCustomerInvoiceContext } from "../../context/CustomerInvoiceContext";
 import Button from "../Button";
+import { generateInvoiceData } from "../../constants/invoiceModalDetails"; // Assuming you have this file
+import { getButtonLabel } from "../../utils/invoiceUtils"; // Importing the utility functions
 
 enum Tab {
   RequestPayment = "requestPayment",
@@ -33,6 +35,24 @@ const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   const [requestPaymentClicked, setRequestPaymentClicked] = useState(false);
   const [sendReminderClicked, setSendReminderClicked] = useState(false);
 
+  useEffect(() => {
+    if (overdueInvoicesCount > 0) {
+      setActiveTab(Tab.RequestPayment);
+    } else if (remainderInvoicesCount > 0) {
+      setActiveTab(Tab.SendRemainder);
+    }
+  }, [overdueInvoicesCount, remainderInvoicesCount, isOpen]);
+
+  // Generate the invoice data dynamically using the utility function
+  const invoiceData = generateInvoiceData(
+    overdueInvoicesCount,
+    overdueCustomers.size,
+    overdueTotalAmount,
+    remainderInvoicesCount,
+    remainderCustomers.size,
+    remainderTotalAmount
+  );
+
   const getCustomerGreeting = () => {
     const customers =
       activeTab === Tab.RequestPayment ? overdueCustomers : remainderCustomers;
@@ -49,31 +69,6 @@ const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
     }
   };
 
-  useEffect(() => {
-    if (overdueInvoicesCount > 0) {
-      setActiveTab(Tab.RequestPayment);
-    } else if (remainderInvoicesCount > 0) {
-      setActiveTab(Tab.SendRemainder);
-    }
-  }, [overdueInvoicesCount, remainderInvoicesCount, isOpen]);
-
-  const getTotalAmount = () => {
-    if (activeTab === Tab.RequestPayment) {
-      return `₹${overdueTotalAmount.toFixed(2)}`;
-    } else if (activeTab === Tab.SendRemainder) {
-      return `₹${remainderTotalAmount.toFixed(2)}`;
-    }
-    return "₹0.00";
-  };
-
-  const getButtonLabel = () => {
-    if (activeTab === Tab.RequestPayment) {
-      return "Request Payment via Email";
-    } else if (activeTab === Tab.SendRemainder) {
-      return "Send Reminder via Email";
-    }
-    return "";
-  };
   const handleButtonClick = () => {
     const today = new Date();
 
@@ -143,18 +138,26 @@ const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
     console.log("Selected Invoices Array:", selectedInvoicesArray);
 
     setSelectedCustomerDetails(updatedCustomerDetails);
-
-    if (requestPaymentClicked || sendReminderClicked) {
-      onClose();
-    }
+    onClose();
   };
 
-  const title =
-    activeTab === Tab.RequestPayment
-      ? "Request Payment"
-      : activeTab === Tab.SendRemainder
-      ? "Send Reminder"
-      : "";
+  const getTotalAmount = () => {
+    if (activeTab === Tab.RequestPayment) {
+      return `₹${overdueTotalAmount.toFixed(2)}`;
+    } else if (activeTab === Tab.SendRemainder) {
+      return `₹${remainderTotalAmount.toFixed(2)}`;
+    }
+    return "₹0.00";
+  };
+
+  // const getButtonLabel = () => {
+  //   if (activeTab === Tab.RequestPayment) {
+  //     return "Request Payment via Email";
+  //   } else if (activeTab === Tab.SendRemainder) {
+  //     return "Send Reminder via Email";
+  //   }
+  //   return "";
+  // };
 
   return (
     <div className={styles.modalOverlay}>
@@ -164,7 +167,13 @@ const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
             <ModalTitle title="No Invoices Available" />
           )}
           {overdueInvoicesCount === 0 || remainderInvoicesCount === 0 ? (
-            <ModalTitle title={title} />
+            <ModalTitle
+              title={
+                activeTab === Tab.RequestPayment
+                  ? "Request Payment"
+                  : "Send Reminder"
+              }
+            />
           ) : null}
           <button className={styles.closeButton} onClick={onClose}>
             <FontAwesomeIcon icon={faTimes} />
@@ -192,55 +201,22 @@ const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
             </div>
           )}
         </>
-
         <div className={styles.infoBackground}>
           <div className={styles.tabBody}>
-            {activeTab === Tab.RequestPayment && overdueInvoicesCount > 0 && (
-              <div className={styles.invoicesSection}>
-                <p className={styles.invoiceHeader}>
-                  #INVOICES
-                  <div className={styles.invoiceValue}>
-                    {overdueInvoicesCount}
-                  </div>
+            <div className={styles.invoicesSection}>
+              {invoiceData[
+                activeTab === Tab.RequestPayment
+                  ? "requestPayment"
+                  : "sendReminder"
+              ].map((item, index) => (
+                <p key={index} className={styles.invoiceHeader}>
+                  {item.label}
+                  <div className={styles.invoiceValue}>{item.value}</div>
                 </p>
-                <p className={styles.invoiceHeader}>
-                  TOTAL CUSTOMERS
-                  <div className={styles.invoiceValue}>
-                    {overdueCustomers.size}
-                  </div>
-                </p>
-                <p className={styles.invoiceHeader}>
-                  TOTAL OVERDUE AMOUNT
-                  <div className={styles.invoiceValue}>
-                    ₹{overdueTotalAmount.toFixed(2)}
-                  </div>{" "}
-                </p>
-              </div>
-            )}
-
-            {activeTab === Tab.SendRemainder && remainderInvoicesCount > 0 && (
-              <div className={styles.invoicesSection}>
-                <p className={styles.invoiceHeader}>
-                  #INVOICES
-                  <div className={styles.invoiceValue}>
-                    {remainderInvoicesCount}
-                  </div>
-                </p>
-                <p className={styles.invoiceHeader}>
-                  TOTAL CUSTOMERS
-                  <div className={styles.invoiceValue}>
-                    {remainderCustomers.size}
-                  </div>
-                </p>
-                <p className={styles.invoiceHeader}>
-                  TOTAL DUE AMOUNT
-                  <div className={styles.invoiceValue}>
-                    ₹{remainderTotalAmount.toFixed(2)}
-                  </div>
-                </p>
-              </div>
-            )}
+              ))}
+            </div>
           </div>
+
           <div className={styles.messageTitle}>Message</div>
           <div className={styles.messageContainer}>
             <div className={styles.customerName}>{getCustomerGreeting()} </div>
@@ -255,11 +231,12 @@ const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
               <div>+919465863456</div>
             </div>
           </div>
-          <div className={styles.buttonContainer}>
-            <Button variant="primary" onClick={handleButtonClick} size="large">
-              {getButtonLabel()}
-            </Button>
-          </div>
+        </div>
+
+        <div className={styles.buttonContainer}>
+          <Button variant="primary" onClick={handleButtonClick} size="large">
+            {getButtonLabel(activeTab)}
+          </Button>
         </div>
       </div>
     </div>

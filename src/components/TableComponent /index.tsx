@@ -10,6 +10,7 @@ import styles from "./table.module.scss";
 import { sortArray } from "../../utils/sorting";
 import { useCustomerInvoiceContext } from "../../context/CustomerInvoiceContext";
 import { InvoiceType } from "../../types/Invoice";
+import { InvoiceTableHeaders } from "../../constants/invoiceTable";
 
 interface SelectedCustomerDetails {
   [customerId: string]: InvoiceType[];
@@ -119,45 +120,40 @@ const TableComponent: React.FC<TableComponentProps> = ({ customerDetails }) => {
       <table>
         <thead>
           <tr>
-            <th></th>
-            <th>Invoice#</th>
-            <th>Document Details</th>
-            <th>Invoice Date</th>
-            <th
-              onClick={() => requestSort("outstandingAmount")}
-              style={{ cursor: "pointer" }}
-              className={styles.sortableHeader}
-            >
-              Outstanding Amount
-              <span className={styles.sortIcons}>
-                {renderSortIcon("outstandingAmount")}
-              </span>
-            </th>
-            <th
-              onClick={() => requestSort("dueDate")}
-              style={{ cursor: "pointer" }}
-              className={styles.sortableHeader}
-            >
-              Due Date
-              <span className={styles.sortIcons}>
-                {renderSortIcon("dueDate")}
-              </span>
-            </th>
-            <th>Status</th>
-            <th>Last Reminder</th>
+            {InvoiceTableHeaders.map((column) => (
+              <th
+                key={column.key}
+                onClick={() =>
+                  column.sortable
+                    ? requestSort(column.key as keyof InvoiceType)
+                    : undefined
+                }
+                style={{ cursor: column.sortable ? "pointer" : "default" }}
+                className={column.sortable ? styles.sortableHeader : ""}
+              >
+                {column.label}
+                {column.sortable && (
+                  <span className={styles.sortIcons}>
+                    {renderSortIcon(column.key as keyof InvoiceType)}
+                  </span>
+                )}
+              </th>
+            ))}
           </tr>
         </thead>
         <tbody>
           {sortedData.map((row) => (
             <tr key={row.invoiceId}>
-              <td>{renderCheckbox(row)}</td>
-              <td>{row.invoiceId || "--"}</td>
-              <td>{row.invoiceNumber || "--"}</td>
-              <td>{row.invoiceDate || "--"}</td>
-              <td>₹{row.outstandingAmount || "--"}</td>
-              <td>{row.dueDate || "--"}</td>
-              <td>{row.status || "--"}</td>
-              <td>{row.lastRemainder || "--"}</td>
+              {InvoiceTableHeaders.map((column) => {
+                if (column.key === "checkbox") {
+                  return <td key={column.key}>{renderCheckbox(row)}</td>;
+                }
+                return (
+                  <td key={column.key}>
+                    {row[column.key as keyof InvoiceType] || "--"}
+                  </td>
+                );
+              })}
             </tr>
           ))}
         </tbody>
