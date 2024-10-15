@@ -7,21 +7,27 @@ import Pagination from "../../components/Pagination";
 import InvoicesModal from "../../components/InvoicesModal";
 import { useCustomerInvoiceContext } from "../../context/CustomerInvoiceContext";
 import CheckboxComponent from "../../components/CheckboxComponent";
+import { CustomerDetailsType, InvoiceType } from "../../types/Invoice"; // assuming you have a defined type for customer details
 
-const Dashboard = () => {
-  const [isInvoicesModalOpen, setIsInvoicesModalOpen] = useState(false);
+const Dashboard: React.FC = () => {
+  const [isInvoicesModalOpen, setIsInvoicesModalOpen] =
+    useState<boolean>(false);
+
   const [expandedAccordion, setExpandedAccordion] = useState<string | number>(
     ""
   );
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [allCustomers, setAllCustomers] = useState<any[]>([]);
-  const [buttonText, setButtonText] = useState(
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const [allCustomers, setAllCustomers] = useState<CustomerDetailsType[]>([]);
+
+  const [buttonText, setButtonText] = useState<string>(
     "Request Payment / Send Reminder"
   );
 
-  const [isAllChecked, setIsAllChecked] = useState(false);
-  const [indeterminate, setIndeterminate] = useState(false);
+  const [isAllChecked, setIsAllChecked] = useState<boolean>(false);
+
+  const [indeterminate, setIndeterminate] = useState<boolean>(false);
 
   const itemsPerPage = 5;
   const {
@@ -47,7 +53,7 @@ const Dashboard = () => {
     remainderInvoicesCount,
   ]);
 
-  const headerKeys = [
+  const headerKeys: string[] = [
     "customerId",
     "totalInvoices",
     "outstandingAmount",
@@ -63,10 +69,23 @@ const Dashboard = () => {
       .replace(/^./, (str) => str.toUpperCase());
   };
 
-  const formatValue = (key: string, value: string | number) => {
+  const formatValue = (
+    key: keyof CustomerDetailsType,
+    value: string | { data: { invoices: InvoiceType[] | [] } } | undefined
+  ) => {
+    if (!value) {
+      return "-";
+    }
+
+    if (typeof value === "object") {
+      const invoiceCount = value.data?.invoices?.length || 0;
+      return `${invoiceCount} Invoices`;
+    }
+
     if (key === "outstandingAmount" || key === "overDueAmount") {
       return `₹ ${value}`;
     }
+
     return value;
   };
 
@@ -87,7 +106,6 @@ const Dashboard = () => {
   };
 
   const updateButtonText = () => {
-    console.log("==>overdueInvoicesCount ", overdueInvoicesCount);
     if (overdueInvoicesCount > 0 && remainderInvoicesCount > 0) {
       setButtonText("Request Payment / Send Reminder");
     } else if (overdueInvoicesCount > 0) {
@@ -122,7 +140,6 @@ const Dashboard = () => {
         <div className={styles.buttonContainer}>
           <Button
             variant="secondary"
-            withIcon={true}
             onClick={() => setIsInvoicesModalOpen(true)}
             disabled={
               overdueInvoicesCount === 0 && remainderInvoicesCount === 0
@@ -132,7 +149,6 @@ const Dashboard = () => {
           </Button>
           <Button
             variant="secondary"
-            withIcon={true}
             onClick={() => alert("Filter icon")}
             disabled={true}
           >
@@ -140,7 +156,6 @@ const Dashboard = () => {
           </Button>
           <Button
             variant="secondary"
-            withIcon={true}
             onClick={() => alert("Sort")}
             disabled={true}
           >
@@ -156,7 +171,7 @@ const Dashboard = () => {
       />
 
       <div className={styles.dataContainer}>
-        {currentCustomerData.map((customer: any) => {
+        {currentCustomerData.map((customer: CustomerDetailsType) => {
           return (
             <div key={customer.customerId}>
               {isInvoicesModalOpen && (
@@ -193,7 +208,10 @@ const Dashboard = () => {
                             key.includes("overDue") ? styles.overDueClass : ""
                           }
                         >
-                          {formatValue(key, customer[key])}
+                          {formatValue(
+                            key as keyof CustomerDetailsType,
+                            customer[key as keyof CustomerDetailsType] || ""
+                          )}
                         </span>
                       ))}
                     </div>

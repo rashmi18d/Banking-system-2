@@ -6,20 +6,23 @@ import { useCustomerInvoiceContext } from "../../context/CustomerInvoiceContext"
 import Button from "../Button";
 import { generateInvoiceData } from "../../constants/invoiceModalDetails";
 import { getButtonLabel, isOverdue } from "../../utils/invoiceUtils";
+import { InvoiceType } from "../../types/Invoice";
 
 enum Tab {
   RequestPayment = "requestPayment",
   SendRemainder = "sendRemainder",
 }
 
+interface InvoicesModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
 const ModalTitle: React.FC<{ title: string }> = ({ title }) => (
   <h4 className={styles.modalTitle}>{title}</h4>
 );
 
-const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
-  isOpen,
-  onClose,
-}) => {
+const InvoicesModal: React.FC<InvoicesModalProps> = ({ isOpen, onClose }) => {
   const {
     overdueInvoicesCount,
     remainderInvoicesCount,
@@ -31,7 +34,7 @@ const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
     setSelectedCustomerDetails,
   } = useCustomerInvoiceContext();
 
-  const [activeTab, setActiveTab] = useState<Tab | "">("");
+  const [activeTab, setActiveTab] = useState<Tab>(Tab.RequestPayment);
 
   useEffect(() => {
     if (overdueInvoicesCount > 0) {
@@ -73,14 +76,14 @@ const InvoicesModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
 
     const selectedInvoicesArray: Array<{
       customerId: string;
-      invoices: any[];
+      invoices: InvoiceType[];
     }> = [];
 
     Object.keys(updatedCustomerDetails).forEach((customerId) => {
       const customerInvoices = updatedCustomerDetails[customerId];
 
       if (customerInvoices) {
-        let filteredInvoices: any[] = [];
+        let filteredInvoices: InvoiceType[] = [];
 
         if (activeTab === Tab.RequestPayment) {
           filteredInvoices = customerInvoices.filter((invoice: any) =>

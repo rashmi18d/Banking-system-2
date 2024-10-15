@@ -6,7 +6,7 @@ export interface InvoiceType {
   outstandingAmount: string;
   dueDate: string;
   status: string | null;
-  lastRemainder: string;
+  lastRemainder: string | null;
   invoiceAmount: string;
   discount: string;
   region: string | null;
@@ -18,4 +18,19 @@ export interface InvoiceType {
     value: string;
     sequence: number;
   }>;
+}
+
+export interface CustomerDetailsType {
+  customerId: string;
+  customerName: string;
+  totalInvoices: string;
+  outstandingAmount: string;
+  overDueInvoices: string;
+  overDueAmount: string;
+  creditOrDebitNote?: string;
+  invoices?: {
+    data: {
+      invoices: InvoiceType[] | [];
+    };
+  };
 }

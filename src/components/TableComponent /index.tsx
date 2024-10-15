@@ -42,6 +42,7 @@ const TableComponent: React.FC<TableComponentProps> = ({ customerDetails }) => {
     direction: "ascending",
   });
 
+  //trying to force rerender the component
   const [, setUpdate] = useState(0);
 
   const data: InvoiceType[] = customerDetails?.invoices?.data?.invoices || [];
