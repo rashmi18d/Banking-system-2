@@ -7,7 +7,7 @@ import Pagination from "../../components/Pagination";
 import InvoicesModal from "../../components/InvoicesModal";
 import { useCustomerInvoiceContext } from "../../context/CustomerInvoiceContext";
 import CheckboxComponent from "../../components/CheckboxComponent";
-import { CustomerDetailsType, InvoiceType } from "../../types/Invoice"; // assuming you have a defined type for customer details
+import { CustomerDetailsType, InvoiceType } from "../../types/Invoice";
 
 const Dashboard: React.FC = () => {
   const [isInvoicesModalOpen, setIsInvoicesModalOpen] =

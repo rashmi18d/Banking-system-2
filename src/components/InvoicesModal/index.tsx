@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faTimes, faCheck } from "@fortawesome/free-solid-svg-icons";
 import styles from "./invoicesModal.module.scss";
 import { useCustomerInvoiceContext } from "../../context/CustomerInvoiceContext";
 import Button from "../Button";
@@ -36,6 +36,10 @@ const InvoicesModal: React.FC<InvoicesModalProps> = ({ isOpen, onClose }) => {
 
   const [activeTab, setActiveTab] = useState<Tab>(Tab.RequestPayment);
 
+  const [sendRemainderBtnClicked, setSendRemainderBtnClicked] = useState(false);
+  const [requestPaymentBtnClicked, setRequestPaymentBtnClicked] =
+    useState(false);
+
   useEffect(() => {
     if (overdueInvoicesCount > 0) {
       setActiveTab(Tab.RequestPayment);
@@ -70,14 +74,10 @@ const InvoicesModal: React.FC<InvoicesModalProps> = ({ isOpen, onClose }) => {
   };
 
   const handleButtonClick = () => {
-    const today = new Date();
+    const isRequestPayment = activeTab === Tab.RequestPayment;
+    const isSendRemainder = activeTab === Tab.SendRemainder;
 
     const updatedCustomerDetails = { ...selectedCustomerDetails };
-
-    const selectedInvoicesArray: Array<{
-      customerId: string;
-      invoices: InvoiceType[];
-    }> = [];
 
     Object.keys(updatedCustomerDetails).forEach((customerId) => {
       const customerInvoices = updatedCustomerDetails[customerId];
@@ -85,49 +85,75 @@ const InvoicesModal: React.FC<InvoicesModalProps> = ({ isOpen, onClose }) => {
       if (customerInvoices) {
         let filteredInvoices: InvoiceType[] = [];
 
-        if (activeTab === Tab.RequestPayment) {
-          filteredInvoices = customerInvoices.filter((invoice: any) =>
+        if (isRequestPayment) {
+          filteredInvoices = customerInvoices.filter((invoice: InvoiceType) =>
             isOverdue(invoice.dueDate)
           );
-        } else if (activeTab === Tab.SendRemainder) {
-          filteredInvoices = customerInvoices.filter(
-            (invoice: any) => !isOverdue(invoice.dueDate)
-          );
+          console.log({ customerId, invoices: filteredInvoices });
         }
 
-        if (filteredInvoices.length > 0) {
-          selectedInvoicesArray.push({
-            customerId,
-            invoices: filteredInvoices,
-          });
-
-          updatedCustomerDetails[customerId] = customerInvoices.map(
-            (invoice: any) => ({
-              ...invoice,
-              lastRemainder: today.toLocaleDateString("en-GB"),
-            })
+        if (isSendRemainder) {
+          filteredInvoices = customerInvoices.filter(
+            (invoice: InvoiceType) => !isOverdue(invoice.dueDate)
           );
-
-          if (activeTab === Tab.RequestPayment) {
-            updatedCustomerDetails[customerId] = customerInvoices.filter(
-              (invoice: any) => !isOverdue(invoice.dueDate)
-            );
-          } else if (activeTab === Tab.SendRemainder) {
-            updatedCustomerDetails[customerId] = customerInvoices.filter(
-              (invoice: any) => isOverdue(invoice.dueDate)
-            );
-          }
-
-          if (updatedCustomerDetails[customerId].length === 0) {
-            delete updatedCustomerDetails[customerId];
-          }
+          console.log({ customerId, invoices: filteredInvoices });
         }
       }
     });
 
-    console.log("Selected Invoices Array:", selectedInvoicesArray);
+    if (isSendRemainder) {
+      setSendRemainderBtnClicked(true);
+    } else if (isRequestPayment) {
+      setRequestPaymentBtnClicked(true);
+    }
+  };
 
-    setSelectedCustomerDetails(updatedCustomerDetails);
+  const handleClose = () => {
+    const updatedCustomerDetails = { ...selectedCustomerDetails };
+
+    if (sendRemainderBtnClicked || requestPaymentBtnClicked) {
+      Object.keys(updatedCustomerDetails).forEach((customerId) => {
+        const customerInvoices = updatedCustomerDetails[customerId];
+
+        if (customerInvoices) {
+          let filteredInvoices: InvoiceType[] = [];
+
+          if (requestPaymentBtnClicked) {
+            filteredInvoices = [
+              ...filteredInvoices,
+              ...customerInvoices.filter((invoice: InvoiceType) =>
+                isOverdue(invoice.dueDate)
+              ),
+            ];
+          }
+
+          if (sendRemainderBtnClicked) {
+            filteredInvoices = [
+              ...filteredInvoices,
+              ...customerInvoices.filter(
+                (invoice: InvoiceType) => !isOverdue(invoice.dueDate)
+              ),
+            ];
+          }
+
+          if (filteredInvoices.length > 0) {
+            updatedCustomerDetails[customerId] = customerInvoices.filter(
+              (invoice: InvoiceType) => !filteredInvoices.includes(invoice)
+            );
+
+            if (updatedCustomerDetails[customerId].length === 0) {
+              delete updatedCustomerDetails[customerId];
+            }
+          }
+        }
+      });
+
+      setSelectedCustomerDetails(updatedCustomerDetails);
+    }
+
+    setSendRemainderBtnClicked(false);
+    setRequestPaymentBtnClicked(false);
+
     onClose();
   };
 
@@ -156,7 +182,7 @@ const InvoicesModal: React.FC<InvoicesModalProps> = ({ isOpen, onClose }) => {
               }
             />
           ) : null}
-          <button className={styles.closeButton} onClick={onClose}>
+          <button className={styles.closeButton} onClick={handleClose}>
             <FontAwesomeIcon icon={faTimes} />
           </button>
         </div>
@@ -200,13 +226,13 @@ const InvoicesModal: React.FC<InvoicesModalProps> = ({ isOpen, onClose }) => {
 
           <div className={styles.messageTitle}>Message</div>
           <div className={styles.messageContainer}>
-            <div className={styles.customerName}>{getCustomerGreeting()} </div>
+            <div className={styles.customerName}>{getCustomerGreeting()}</div>
             <div className={styles.emailDescription}>
               Your payment amounting to {getTotalAmount()} is overdue. Please
               complete the payment to stop incurring charges.
             </div>
             <div className={styles.emailInfo}>
-              <div>Regards, </div>
+              <div>Regards,</div>
               <div>Sanjay Kumar</div>
               <div>Senior AR Manager, ABC Company</div>
               <div>+919465863456</div>
@@ -215,9 +241,67 @@ const InvoicesModal: React.FC<InvoicesModalProps> = ({ isOpen, onClose }) => {
         </div>
 
         <div className={styles.buttonContainer}>
-          <Button variant="primary" onClick={handleButtonClick} size="large">
-            {getButtonLabel(activeTab)}
-          </Button>
+          {activeTab === Tab.RequestPayment && (
+            <Button
+              variant="primary"
+              onClick={handleButtonClick}
+              size="large"
+              customClass={
+                requestPaymentBtnClicked ? styles.activePaymentCls : ""
+              }
+            >
+              {requestPaymentBtnClicked ? (
+                <div className={styles.buttonSubContainer}>
+                  <div className={styles.Circle}>
+                    <FontAwesomeIcon
+                      icon={faCheck}
+                      style={{ color: "green" }}
+                    />
+                  </div>
+                  <div>
+                    Email initiated
+                    <div className={styles.activePaymentSubClass}>
+                      Your payment request is being successfully initiated
+                      against the selected Invoices
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                getButtonLabel(activeTab)
+              )}
+            </Button>
+          )}
+
+          {activeTab === Tab.SendRemainder && (
+            <Button
+              variant="primary"
+              onClick={handleButtonClick}
+              size="large"
+              customClass={
+                sendRemainderBtnClicked ? styles.activePaymentCls : ""
+              }
+            >
+              {sendRemainderBtnClicked ? (
+                <div className={styles.buttonSubContainer}>
+                  <div className={styles.Circle}>
+                    <FontAwesomeIcon
+                      icon={faCheck}
+                      style={{ color: "green" }}
+                    />
+                  </div>
+                  <div>
+                    Email initiated
+                    <div className={styles.activePaymentSubClass}>
+                      Your payment request is being successfully initiated
+                      against the selected Invoices
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                getButtonLabel(activeTab)
+              )}
+            </Button>
+          )}
         </div>
       </div>
     </div>

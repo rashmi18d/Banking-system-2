@@ -133,3 +133,30 @@
   border-radius: 1rem;
   margin-bottom: 2rem;
 }
+
+.Circle {
+  width: 15px;
+  padding: 1rem;
+  background-color: white;
+  height: 15px;
+  border-radius: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.activePaymentCls {
+  background-color: green !important;
+  width: 100% !important;
+  padding: 1rem !important;
+  text-align: justify;
+}
+.activePaymentSubClass {
+  padding-top: 4px !important;
+  font-size: 1rem !important;
+}
+.buttonSubContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
