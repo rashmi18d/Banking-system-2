@@ -1,0 +1,58 @@
+.paginationContainer {
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  background-color: white;
+  padding: 10px 0;
+  z-index: 10;
+}
+
+.arrowButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 5px;
+  color: #333;
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  &.burgundy {
+    color: var(--burgundy);
+  }
+
+  &:hover:not(:disabled) {
+    color: none; /* Optional hover color */
+  }
+}
+
+.pageNumber {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px; /* Adjust as needed */
+  height: 40px; /* Adjust as needed */
+  font-size: 16px; /* Size of the page number */
+  color: var(--black);
+  border: none;
+  background-color: var(--white);
+  border-radius: 50%;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #e0e0e0; /* Light hover effect */
+  }
+}
+
+.activePage {
+  background-color: var(--white); /* Active page color */
+  box-shadow: 0 0 10px rgba(199, 196, 196, 0.3); /* Box shadow for active page */
+  font-weight: bold;
+  color: var(--burgundy); /* Change color for active page */
+}

@@ -1,0 +1,41 @@
+.checkboxInputContainer {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 2px solid var(--burgundy);
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  outline: none;
+  background-color: var(--white);
+
+  &:checked {
+    background-color: var(--burgundy);
+    border-color: var(--burgundy);
+
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='white' d='M13.354 4.646a.5.5 0 0 0-.708 0L6.5 10.793 3.354 7.646a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l6.5-6.5a.5.5 0 0 0 0-.708z'/%3E%3C/svg%3E");
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  &:hover {
+    border-color: var(--burgundy);
+  }
+
+  &.indeterminate {
+    background-color: var(--burgundy);
+    border-color: var(--burgundy);
+
+    position: relative;
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 4px;
+      right: 4px;
+      height: 4px;
+      background-color: white;
+      transform: translateY(-50%);
+    }
+  }
+}

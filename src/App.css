@@ -1,0 +1,9 @@
+@import "../src/scss/_color.scss";
+
+#root {
+  padding: 1.5rem 2rem;
+}
+body {
+  background-color: var(--white);
+  color: var(--black);
+}
